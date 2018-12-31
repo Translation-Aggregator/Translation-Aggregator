@@ -1,6 +1,6 @@
 #pragma once
 
-#include <Shared\StringUtil.h>
+#include <Shared/StringUtil.h>
 #include "Config.h"
 
 struct ContextRecord

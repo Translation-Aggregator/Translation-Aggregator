@@ -1,4 +1,4 @@
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 #include "Context.h"
 #include "resource.h"
 #include "Filter.h"

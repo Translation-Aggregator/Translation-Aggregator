@@ -1,4 +1,4 @@
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 #include "WindowManager.h"
 #include <Shared/Atlas.h>
 #include <time.h>

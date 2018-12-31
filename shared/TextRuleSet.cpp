@@ -1,6 +1,6 @@
-﻿#include <Shared\Shrink.h>
+﻿#include <Shared/Shrink.h>
 #include "TextRuleSet.h"
-#include <Shared\StringUtil.h>
+#include <Shared/StringUtil.h>
 
 wchar_t *GetFileText(wchar_t *path, wchar_t *fileName)
 {

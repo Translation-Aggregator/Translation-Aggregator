@@ -1,4 +1,4 @@
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 #include "Context.h"
 class BufferedSocket **sockets;
 int numSockets;

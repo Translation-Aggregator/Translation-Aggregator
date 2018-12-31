@@ -39,8 +39,8 @@
 //#include <Dwrite.h>
 
 // Simple way of ensuring a clean build before release.
-#define APP_NAME L"Translation Aggregator"
-#define APP_VERSION L"2018.07.21 r190 (Unofficial)"
+#define APP_NAME L"TranslationAggregator"
+#define APP_VERSION CUR_TIME L"-" GIT_HASH L" (Unofficial)"
 
 #define HTTP_REQUEST_ID L"TRAG/" APP_VERSION
 
@@ -70,12 +70,12 @@ extern HWND hWndSuperMaster;
 #define WMA_FORWARD                  (WM_APP + 0x61)
 #define WMA_JPARSER_STATE            (WM_APP + 0x70)
 
-#ifndef _DEBUG
-	#if (_MSC_VER<1300)
-		#pragma comment(linker,"/RELEASE")
-		#pragma comment(linker,"/opt:nowin98")
-	#endif
-#endif
+// #ifndef _DEBUG
+// 	#if (_MSC_VER<1300)
+// 		#pragma comment(linker,"/RELEASE")
+// 		#pragma comment(linker,"/opt:nowin98")
+// 	#endif
+// #endif
 
 __forceinline unsigned short PASCAL FAR ntohs(unsigned short s)
 {

@@ -43,5 +43,5 @@ char *HonyakuWindow::GetTranslationPrefix(Language src, Language dst, const char
 		return NULL;
 	if (src == LANGUAGE_Chinese_Simplified)
 		src = LANGUAGE_Chinese_Traditional;
-	return __super::GetTranslationPrefix(src, dst, text);
+	return HttpWindow::GetTranslationPrefix(src, dst, text);
 }

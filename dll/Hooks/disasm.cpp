@@ -1,4 +1,4 @@
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 
 // Original source: http://hack-expo.void.ru/groups/blt/text/disasm.txt
 

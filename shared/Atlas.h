@@ -1,7 +1,7 @@
 #pragma once
 
-#include <Shared\StringUtil.h>
-#include "TextRuleSet.h"
+#include <Shared/StringUtil.h>
+#include <Shared/TextRuleSet.h>
 
 #define ATLAS_JAP_TO_ENG  1
 #define ATLAS_ENG_TO_JAP  2
@@ -23,7 +23,7 @@ void UninitAtlas();
 int GetAtlasVersion();
 
 typedef int __cdecl FreeAtlasDataType(void *mem, void *noSureHowManyArgs, void *, void *);
-extern FreeAtlasDataType *FreeAtlasData;
+// extern FreeAtlasDataType *FreeAtlasData;
 
 // Opens up dictionary type.  Think word is what word to open it at, but the "Del" makes me wary.
 typedef int __cdecl AwuWordDelType(int x1, char *type, int x3, char *word);

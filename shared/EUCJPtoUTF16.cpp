@@ -1,7 +1,7 @@
 // EUC-JP -> UTF16 (fits in UCS2) implementation using reference tables
 // 10x faster than generic code in ConversionTables and doesn't use external files
 
-#include <shared\Shrink.h>
+#include <Shared/Shrink.h>
 
 #define NOCHAR 0xFFFD
 

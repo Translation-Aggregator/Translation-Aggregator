@@ -25,10 +25,12 @@ struct TextRule
 class TextRuleSet
 {
 protected:
+
+public:
+
 	inline TextRuleSet() {}
 	// Use this instead of constructor so can fail.
-	friend TextRuleSet *LoadRuleSet(wchar_t *path, wchar_t *fileName, unsigned int flags);
-public:
+
 	unsigned int flags;
 
 	// Each individual rule is stored as a single memory block containing
@@ -40,3 +42,6 @@ public:
 
 	~TextRuleSet();
 };
+
+TextRuleSet *LoadRuleSet(wchar_t *path, wchar_t *fileName, unsigned int flags);
+

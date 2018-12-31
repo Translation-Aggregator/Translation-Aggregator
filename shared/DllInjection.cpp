@@ -1,5 +1,5 @@
 // Not currently used.
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 
 #include "DllInjection.h"
 #include <tlhelp32.h>
@@ -101,7 +101,7 @@ int InjectDll(HANDLE hProcess, HINSTANCE hInst)
 	wchar_t dllFile[2*MAX_PATH];
 	if (GetModuleFileNameW(hInst, dllFile, sizeof(dllFile)/2) > sizeof(dllFile)/2) return 0;
 
-	void *loadLibraryW = GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "LoadLibraryW");
+	FARPROC loadLibraryW = GetProcAddress(GetModuleHandleW(L"kernel32.dll"), "LoadLibraryW");
 	if (!loadLibraryW) return 0;
 
 	wchar_t *name;

@@ -1,4 +1,4 @@
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 #include "Filter.h"
 
 int InfiniteRepeatFilter(wchar_t *s, int len)

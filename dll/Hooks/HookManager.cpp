@@ -1,4 +1,4 @@
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 #include "HookManager.h"
 #include "Disasm.h"
 #include <tlhelp32.h>

@@ -1,7 +1,7 @@
-﻿#include <Shared\Shrink.h>
-#include <Shared\Atlas.h>
-#include <Shared\StringUtil.h>
-#include <Shared\ProcessUtil.h>
+﻿#include <Shared/Shrink.h>
+#include <Shared/Atlas.h>
+#include <Shared/StringUtil.h>
+#include <Shared/ProcessUtil.h>
 
 wchar_t AtlasPath[2*MAX_PATH];
 static int atlasVersion = 0;

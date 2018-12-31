@@ -1,4 +1,4 @@
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 #include "MyDirectDraw.h"
 
 class myIDirectDrawSurface : public IDirectDrawSurface, IDirectDrawSurface2, IDirectDrawSurface3 {

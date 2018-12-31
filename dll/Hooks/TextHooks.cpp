@@ -1,7 +1,7 @@
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 #include "HookManager.h"
 #include <tlhelp32.h>
-#include <Shared\TextHookParser.h>
+#include <Shared/TextHookParser.h>
 
 
 static CRITICAL_SECTION cSection;

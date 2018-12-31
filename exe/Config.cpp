@@ -1,8 +1,8 @@
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 #include "Config.h"
 
 // Needed for debug privileges.
-#include <Shared\DllInjection.h>
+#include <Shared/DllInjection.h>
 
 #include "resource.h"
 

@@ -155,7 +155,7 @@ void *ResolveAddress(wchar_t *str, int testOnly)
 			if (*end && ordinal < (1<<16))
 			{
 				if (testOnly) return (void*)1;
-				base = GetProcAddress(hMod, (char*)ordinal);
+				base = reinterpret_cast<void*>(GetProcAddress(hMod, (char*)ordinal));
 			}
 			if (!base) return 0;
 		}
@@ -170,7 +170,7 @@ void *ResolveAddress(wchar_t *str, int testOnly)
 				free(temp);
 				return (void*)1;
 			}
-			base = GetProcAddress(hMod, temp);
+			base = reinterpret_cast<void*>(GetProcAddress(hMod, temp));
 			free(temp);
 			if (!base) return 0;
 		}

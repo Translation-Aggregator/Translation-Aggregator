@@ -13,34 +13,40 @@ public:
 };
 
 // MS code to name a thread.
-const DWORD MS_VC_EXCEPTION = 0x406D1388;
+// const DWORD MS_VC_EXCEPTION = 0x406D1388;
 
-#pragma pack(push,8)
-typedef struct tagTHREADNAME_INFO
-{
-	DWORD dwType; // Must be 0x1000.
-	LPCSTR szName; // Pointer to name (in user addr space).
-	DWORD dwThreadID; // Thread ID (-1=caller thread).
-	DWORD dwFlags; // Reserved for future use, must be zero.
-} THREADNAME_INFO;
-#pragma pack(pop)
+// #pragma pack(push,8)
+// typedef struct tagTHREADNAME_INFO
+// {
+// 	DWORD dwType; // Must be 0x1000.
+// 	LPCSTR szName; // Pointer to name (in user addr space).
+// 	DWORD dwThreadID; // Thread ID (-1=caller thread).
+// 	DWORD dwFlags; // Reserved for future use, must be zero.
+// } THREADNAME_INFO;
+// #pragma pack(pop)
 
-void SetThreadName(DWORD dwThreadID, const char* threadName)
-{
-	THREADNAME_INFO info;
-	info.dwType = 0x1000;
-	info.szName = threadName;
-	info.dwThreadID = dwThreadID;
-	info.dwFlags = 0;
+//TODO: fix for MinGW
+// void SetThreadName(DWORD dwThreadID, const char* threadName)
+// {
+// 	THREADNAME_INFO info;
+// 	info.dwType = 0x1000;
+// 	info.szName = threadName;
+// 	info.dwThreadID = dwThreadID;
+// 	info.dwFlags = 0;
 
-	__try
-	{
-		RaiseException( MS_VC_EXCEPTION, 0, sizeof(info)/sizeof(ULONG_PTR), (ULONG_PTR*)&info );
-	}
-	__except(EXCEPTION_EXECUTE_HANDLER)
-	{
-	}
-}
+// 	try
+// 	{
+// 		RaiseException( MS_VC_EXCEPTION, 0, sizeof(info)/sizeof(ULONG_PTR), (ULONG_PTR*)&info );
+// 	}
+// 	catch(EXCEPTION_EXECUTE_HANDLER)
+// 	{
+// 	}
+// 	HRESULT r;
+//     r = SetThreadDescription(
+//         GetCurrentThread(),
+//         threadName
+//     );
+// }
 
 }  // namespace
 
@@ -49,7 +55,7 @@ Thread::Thread(const char* name)
 	event_ = CreateEvent(NULL, FALSE, FALSE, NULL);
 	DWORD id;
 	thread_handle_ = CreateThread(NULL, 0, Thread::ThreadStartProc, this, 0, &id);
-	SetThreadName(id, name);
+	// SetThreadName(id, name);
 }
 
 Thread::~Thread()

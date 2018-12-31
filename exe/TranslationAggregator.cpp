@@ -7,7 +7,7 @@
 #include <crtdbg.h>
 //*/
 
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 #include "util/Dictionary.h"
 #include "TranslationWindows/TranslationWindow.h"
 #include "TranslationWindows/TranslationWindowFactory.h"

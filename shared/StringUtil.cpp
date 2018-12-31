@@ -1,5 +1,5 @@
-﻿#include <Shared\Shrink.h>
-#include <Shared\StringUtil.h>
+﻿#include <Shared/Shrink.h>
+#include <Shared/StringUtil.h>
 #include "ConversionTable.h"
 
 
@@ -11,7 +11,7 @@
 #ifndef NO_ZLIB
 // Not building a library, don't export/import the symbols, for the love of god.
 #define ZEXTERN
-#include <3rd Party/zlib/zlib.h>
+#include <3rdParty/zlib/zlib.h>
 #endif
 
 struct RomajiTable

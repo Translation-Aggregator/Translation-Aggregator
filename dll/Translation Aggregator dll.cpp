@@ -10,9 +10,9 @@
 // games (Also an easy fix - just monitor the exe launching functions and inject when they're
 // used)).
 
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 #include <Tlhelp32.h>
-#include <Shared\StringUtil.h>
+#include <Shared/StringUtil.h>
 #include <Shared/Atlas.h>
 #include <Psapi.h>
 #include "WindowTranslator.h"

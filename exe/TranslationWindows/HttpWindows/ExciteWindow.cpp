@@ -38,8 +38,9 @@ char *ExciteWindow::GetLangIdString(Language lang, int src)
 			p = "wb_lp=EN"; break;
 		case LANGUAGE_Japanese:
 			p = "wb_lp=JA"; break;
-		case LANGUAGE_Chinese_Traditional:
-			return src ? "big5=yes&big5_lang=yes&wb_lp=CH" : "CH&big5=yes";
+		//TODO: fix char vs const char
+		// case LANGUAGE_Chinese_Traditional:
+		// 	return src ? "big5=yes&big5_lang=yes&wb_lp=CH" : "CH&big5=yes";
 		case LANGUAGE_Chinese_Simplified:
 			p = "wb_lp=CH"; break;
 		case LANGUAGE_Korean:

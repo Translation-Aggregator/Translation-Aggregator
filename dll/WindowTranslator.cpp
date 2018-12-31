@@ -1,4 +1,4 @@
-#include <Shared\Shrink.h>
+#include <Shared/Shrink.h>
 #include "WindowTranslator.h"
 #include <Shared/Atlas.h>
 

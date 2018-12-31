@@ -13,17 +13,18 @@
 #define TWF_RICH_TEXT    4
 #define TWF_NO_EDIT      8
 
+LRESULT CALLBACK TranslationWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+
 class TranslationWindow
 {
 private:
 	inline virtual void AddClassButtons() {}
-	void PlaceWindows();
+
 public:
+	void PlaceWindows();
 	// If mod is null, make any substitutions to orig and populate it as needed.
 	void Translate(SharedString *orig, SharedString *&mod, int history_id, bool only_use_history);
 	virtual void Translate(SharedString *text, int history_id, bool only_use_history) = 0;
-
-	friend LRESULT CALLBACK TranslationWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
 
 	// Saved to config file.
 	char autoClipboard;
