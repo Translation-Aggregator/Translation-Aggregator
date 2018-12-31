@@ -1,0 +1,606 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Japanese (Japan) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_JPN)
+LANGUAGE LANG_JAPANESE, SUBLANG_DEFAULT
+#pragma code_page(932)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MAIN_MENU MENU
+BEGIN
+    POPUP "&File"
+    BEGIN
+        MENUITEM "&Global Hotkeys\tCtrl-Alt-key", ID_FILE_GLOBALHOTKEYS
+        MENUITEM SEPARATOR
+        MENUITEM "&Quit\tAlt-X",                ID_FILE_QUIT
+    END
+    POPUP "&Tools"
+    BEGIN
+        MENUITEM "&Launch Text Hooker\tCtrl-L", ID_FILE_INJECTINTOPROCESS
+        MENUITEM "&Manage Attached Contexts\tCtrl-M", ID_TOOLS_MANAGECONTEXTS
+        MENUITEM SEPARATOR
+        MENUITEM "&Auto Convert Half-Width Katakana", ID_TOOLS_AUTOCONVERT
+        MENUITEM "A&uto Convert to Hiragana when no Japanese", ID_TOOLS_AUTOCONVERT_HIRAGANA
+        MENUITEM SEPARATOR
+        MENUITEM "&Enable Substitutions",       ID_TOOLS_ENABLESUBSTITUTIONS
+        MENUITEM "&Substitutions...\tAlt-S",    ID_TOOLS_OPTIONS
+        MENUITEM SEPARATOR
+        MENUITEM "&Previous History Entry\tAlt-Up (Alt-PgUp)", ID_HISTORY_BACK
+        MENUITEM "&Next History Entry\tAlt-Down (Alt-PgDn)", ID_HISTORY_FORWARD
+    END
+    POPUP "&View"
+    BEGIN
+        MENUITEM "&Font\tAlt-F",                ID_VIEW_FONT
+        MENUITEM "&Tooltip Font\tAlt-T",        ID_VIEW_TOOLTIP_FONT
+        MENUITEM SEPARATOR
+        MENUITEM "Hide &Toolbar\tCtrl-T",       ID_VIEW_HIDETOOLBAR
+        MENUITEM "&Hide  Frame\tCtrl-F",        ID_VIEW_HIDEWINDOWFRAME
+        MENUITEM "&Always on Top\tAlt-A",       ID_TOPMOST
+        MENUITEM SEPARATOR
+        MENUITEM "&More Transparent\tCtrl-Num-", ID_VIEW_LESSSOLID
+        MENUITEM "&Less Transparent\tCtrl-Num+", ID_VIEW_MORESOLID
+    END
+    POPUP "&Window"
+    BEGIN
+        MENUITEM "Lock Order",                  ID_VIEW_LOCKORDER
+        MENUITEM SEPARATOR
+        MENUITEM "&Show All\tCtrl-0",           ID_VIEW_SHOWALL
+        MENUITEM "&Two Column\tCtrl-2",         ID_VIEW_TWOCOLUMN
+        MENUITEM SEPARATOR
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Accelerator
+//
+
+IDR_ACCELERATORS ACCELERATORS
+BEGIN
+    "0",            ID_BIND_LAYOUT_0,       VIRTKEY, SHIFT, ALT, NOINVERT
+    "1",            ID_BIND_LAYOUT_1,       VIRTKEY, SHIFT, ALT, NOINVERT
+    "2",            ID_BIND_LAYOUT_2,       VIRTKEY, SHIFT, ALT, NOINVERT
+    "3",            ID_BIND_LAYOUT_3,       VIRTKEY, SHIFT, ALT, NOINVERT
+    "4",            ID_BIND_LAYOUT_4,       VIRTKEY, SHIFT, ALT, NOINVERT
+    "5",            ID_BIND_LAYOUT_5,       VIRTKEY, SHIFT, ALT, NOINVERT
+    "6",            ID_BIND_LAYOUT_6,       VIRTKEY, SHIFT, ALT, NOINVERT
+    "7",            ID_BIND_LAYOUT_7,       VIRTKEY, SHIFT, ALT, NOINVERT
+    "8",            ID_BIND_LAYOUT_8,       VIRTKEY, SHIFT, ALT, NOINVERT
+    "9",            ID_BIND_LAYOUT_9,       VIRTKEY, SHIFT, ALT, NOINVERT
+    "L",            ID_FILE_INJECTINTOPROCESS, VIRTKEY, CONTROL, NOINVERT
+    "X",            ID_FILE_QUIT,           VIRTKEY, ALT, NOINVERT
+    "0",            ID_LAYOUT_0,            VIRTKEY, ALT, NOINVERT
+    "1",            ID_LAYOUT_1,            VIRTKEY, ALT, NOINVERT
+    "2",            ID_LAYOUT_2,            VIRTKEY, ALT, NOINVERT
+    "3",            ID_LAYOUT_3,            VIRTKEY, ALT, NOINVERT
+    "4",            ID_LAYOUT_4,            VIRTKEY, ALT, NOINVERT
+    "5",            ID_LAYOUT_5,            VIRTKEY, ALT, NOINVERT
+    "6",            ID_LAYOUT_6,            VIRTKEY, ALT, NOINVERT
+    "7",            ID_LAYOUT_7,            VIRTKEY, ALT, NOINVERT
+    "8",            ID_LAYOUT_8,            VIRTKEY, ALT, NOINVERT
+    "9",            ID_LAYOUT_9,            VIRTKEY, ALT, NOINVERT
+    "H",            ID_TO_HIRAGANA,         VIRTKEY, CONTROL, NOINVERT
+    "K",            ID_TO_KATAKANA,         VIRTKEY, CONTROL, NOINVERT
+    "R",            ID_TO_ROMAJI,           VIRTKEY, CONTROL, NOINVERT
+    "M",            ID_TOOLS_MANAGECONTEXTS, VIRTKEY, CONTROL, NOINVERT
+    "S",            ID_TOOLS_OPTIONS,       VIRTKEY, ALT, NOINVERT
+    "A",            ID_TOPMOST,             VIRTKEY, ALT, NOINVERT
+    "F",            ID_VIEW_FONT,           VIRTKEY, ALT, NOINVERT
+    "T",            ID_VIEW_HIDETOOLBAR,    VIRTKEY, CONTROL, NOINVERT
+    "F",            ID_VIEW_HIDEWINDOWFRAME, VIRTKEY, CONTROL, NOINVERT
+    VK_SUBTRACT,    ID_VIEW_LESSSOLID,      VIRTKEY, CONTROL, NOINVERT
+    VK_ADD,         ID_VIEW_MORESOLID,      VIRTKEY, CONTROL, NOINVERT
+    "0",            ID_VIEW_SHOWALL,        VIRTKEY, CONTROL, NOINVERT
+    "T",            ID_VIEW_TOOLTIP_FONT,   VIRTKEY, ALT, NOINVERT
+    "2",            ID_VIEW_TWOCOLUMN,      VIRTKEY, CONTROL, NOINVERT
+    VK_UP,          ID_HISTORY_BACK,        VIRTKEY, ALT, NOINVERT
+    VK_DOWN,        ID_HISTORY_FORWARD,     VIRTKEY, ALT, NOINVERT
+    VK_PRIOR,       ID_HISTORY_BACK,        VIRTKEY, ALT, NOINVERT
+    VK_NEXT,        ID_HISTORY_FORWARD,     VIRTKEY, ALT, NOINVERT
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_ICON1               ICON                    "icon1.ico"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Toolbar
+//
+
+IDR_TOOLBAR_TRANSLATION TOOLBAR 19, 19
+BEGIN
+    BUTTON      ID_TRANSLATE
+    BUTTON      ID_TRANSLATE_ALL
+    BUTTON      ID_SEARCH_DICT
+    BUTTON      ID_AUTOCLIPBOARD
+    BUTTON      ID_CLOSE_TRANSLATION
+    BUTTON      ID_ATLAS_TRANSLATION_EDITOR
+    BUTTON      ID_CONFIG
+    BUTTON      ID_TOPMOST
+    BUTTON      ID_TRANS_HIGHLIGHTED
+    BUTTON      ID_SLOW1
+    BUTTON      ID_SLOW2
+    BUTTON      ID_SLOW3
+    BUTTON      ID_SLOW4
+    BUTTON      ID_SLOW5
+    BUTTON      ID_SLOW6
+    BUTTON      ID_SLOW7
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDR_TOOLBAR_TRANSLATION BITMAP                  "toolbar.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_ATLAS_CONFIG DIALOGEX 0, 0, 248, 127
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Atlas Config"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    GROUPBOX        "Translation Environment",IDC_STATIC,120,7,121,34
+    COMBOBOX        IDC_ENVIRONMENT,127,21,108,77,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Break Sentence On",IDC_STATIC,7,7,107,113
+    CONTROL         "Ellispses (…)",IDC_ELLIPSES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,21,55,10
+    CONTROL         "Commas (、)",IDC_COMMAS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,35,55,10
+    CONTROL         "Quotes (「」)",IDC_QUOTES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,49,55,10
+    CONTROL         "Double Quotes (『』)",IDC_DOUBLE_QUOTES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,63,79,10
+    CONTROL         "Parentheses (（）)",IDC_PARENTHESES,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,77,71,10
+    CONTROL         "Square Brackets (［］, 【】)",IDC_SQUARE_BRACKETS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,91,97,10
+    CONTROL         "Single Line Breaks",IDC_SINGLE_LINE_BREAKS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,105,81,10
+    GROUPBOX        "Translation Rule Set",IDC_STATIC,120,47,121,34
+    COMBOBOX        IDC_RULE_SET,127,61,108,77,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    DEFPUSHBUTTON   "OK",IDOK,136,106,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,191,106,50,14
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_ATLAS_CONFIG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 241
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 120
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // Japanese (Japan) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+/////////////////////////////////////////////////////////////////////////////
+// English (United States) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_ENU)
+LANGUAGE LANG_ENGLISH, SUBLANG_ENGLISH_US
+#pragma code_page(1252)
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Menu
+//
+
+IDR_MENU_CONTEXT_MANAGER MENU
+BEGIN
+    POPUP "Process"
+    BEGIN
+        MENUITEM "Clear",                       ID_PROCESS_CLEAR
+    END
+    POPUP "Context"
+    BEGIN
+        MENUITEM "Clear History",               ID_CONTEXT_CLEAR
+    END
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+IDD_INJECT_DIALOG DIALOGEX 0, 0, 517, 351
+STYLE DS_SETFONT | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Select Program"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    GROUPBOX        "Profile Name",IDC_STATIC,7,4,156,32
+    COMBOBOX        IDC_PROFILE_NAME,15,16,140,78,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Injection type",IDC_STATIC,7,40,157,87
+    CONTROL         "Autodetect if running, by exe name",IDC_AUTODETECT_PROCESS,
+                    "Button",BS_AUTORADIOBUTTON | WS_GROUP,15,54,130,10
+    CONTROL         "Inject into running process",IDC_INJECT_PROCESS,"Button",BS_AUTORADIOBUTTON,15,65,101,10
+    CONTROL         "Launch new process:",IDC_NEW_PROCESS,"Button",BS_AUTORADIOBUTTON,15,76,83,10
+    EDITTEXT        IDC_EXE_PATH,25,89,109,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_BROWSE,139,90,17,11
+    PUSHBUTTON      "Create Shortcut",IDC_CREATE_SHORTCUT,91,107,66,14
+    GROUPBOX        "Process Locale",IDC_STATIC,7,130,157,37
+    COMBOBOX        IDC_CB_LOCALE,15,145,141,103,CBS_DROPDOWNLIST | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+    GROUPBOX        "Text hook",IDC_STATIC,7,172,157,48
+    CONTROL         "No text hook",IDC_NO_HOOK,"Button",BS_AUTORADIOBUTTON | WS_GROUP,15,184,57,10
+    CONTROL         "AGTH",IDC_AGTH,"Button",BS_AUTORADIOBUTTON,15,195,34,10
+    CONTROL         "Internal hook",IDC_INTERNAL_HOOK,"Button",BS_AUTORADIOBUTTON,15,206,141,10
+    GROUPBOX        "Child processes",IDC_STATIC,7,225,157,41
+    CONTROL         "Inject into child processes",IDC_INJECT_CHILDREN,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,239,99,10
+    CONTROL         "Use same settings for child processes",IDC_INJECT_CHILDREN_SAME_SETTINGS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,251,135,10
+    GROUPBOX        "Additional Options",IDC_STATIC,7,272,157,53
+    CONTROL         "Translate windows menus with Atlas",IDC_TRANSLATE_MENUS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,285,131,10
+    CONTROL         "Override DCBS functions (Locale fix)",IDC_DCBS_OVERRIDE,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,297,132,10
+    CONTROL         "Log translated menu text",IDC_LOG_TRANSLATIONS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,15,309,97,10
+    GROUPBOX        "Internal hooker options",IDC_STATIC,172,7,157,202
+    LTEXT           "Delay before hooking text (sec)",IDC_STATIC,182,19,102,8
+    EDITTEXT        IDC_HOOK_DELAY,286,17,37,12,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Context idle delay (ms)",IDC_STATIC,182,36,75,8
+    EDITTEXT        IDC_INTERNAL_IDLE_DELAY,286,34,37,12,ES_AUTOHSCROLL | ES_NUMBER
+    CONTROL         "Use default text hooks",IDC_INTERNAL_DEFAULT_HOOKS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,181,50,89,10
+    CONTROL         "Filter default hook calls from system dlls",IDC_INTERNAL_DEFAULT_FILTERS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,181,62,140,10
+    LTEXT           "Custom hooks",IDC_STATIC,182,77,46,8
+    EDITTEXT        IDC_INTERNAL_HOOKS,180,90,140,94,ES_MULTILINE | ES_AUTOHSCROLL | ES_WANTRETURN
+    PUSHBUTTON      "AGTH converter",IDC_AGTH_CODE_CONVERSION_TOOL,200,189,62,14
+    PUSHBUTTON      "Check codes",IDC_CHECK_INTERNAL_CODES,270,189,50,14
+    GROUPBOX        "AGTH options",IDC_STATIC,172,213,157,118
+    CONTROL         "Auto copy to clipboard",IDC_CLIPBOARD_COPY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,180,226,88,10
+    CONTROL         "Remove repeated characters:",IDC_AGTH_REMOVE_REPEATED_SYMBOLS,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,180,239,112,10
+    EDITTEXT        IDC_AGTH_REMOVE_REPEATED_SYMBOL_COUNT,292,237,21,12,ES_AUTOHSCROLL
+    CONTROL         "Remove repeated phrases:",IDC_AGTH_REMOVE_REPEATED_PHRASES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,180,255,100,10
+    EDITTEXT        IDC_AGTH_REMOVE_REPEATED_PHRASE_COUNT,282,253,18,12,ES_AUTOHSCROLL
+    EDITTEXT        IDC_AGTH_REMOVE_REPEATED_PHRASE_COUNT2,304,253,18,12,ES_AUTOHSCROLL
+    CONTROL         "Add parameters:",IDC_AGTH_ADD_PARAMS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,180,271,70,10
+    EDITTEXT        IDC_AGTH_PARAMS_ADDED,190,282,129,12,ES_AUTOHSCROLL
+    LTEXT           "Resulting parameters:",IDC_STATIC,180,300,72,8
+    EDITTEXT        IDC_AGTH_ACTUAL_PARAMS,190,311,129,12,ES_AUTOHSCROLL | ES_READONLY
+    GROUPBOX        "Running processes",IDC_STATIC,336,7,174,317
+    CONTROL         "",IDC_PROCESS_LIST,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | LVS_ALIGNLEFT | LVS_NOSORTHEADER | WS_TABSTOP,344,21,159,296,WS_EX_CLIENTEDGE
+    PUSHBUTTON      "Atlas config",IDC_CONFIG_ATLAS,336,330,50,14
+    DEFPUSHBUTTON   "OK",IDOK,406,330,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,460,330,50,14
+END
+
+IDD_MECAB_CONFIG DIALOGEX 0, 0, 168, 154
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Mecab Configuration"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    GROUPBOX        "Characters",IDC_STATIC,7,7,58,51
+    CONTROL         "Hiragana",IDC_HIRAGANA,"Button",BS_AUTORADIOBUTTON | WS_GROUP,15,20,45,10
+    CONTROL         "Katakana",IDC_KATAKANA,"Button",BS_AUTORADIOBUTTON,15,32,46,10
+    CONTROL         "Romaji",IDC_ROMAJI,"Button",BS_AUTORADIOBUTTON,15,44,37,10
+    GROUPBOX        "Font sizes",IDC_STATIC,71,7,89,51
+    RTEXT           "Normal",IDC_STATIC,83,23,24,8
+    EDITTEXT        IDC_NORMAL_FONT_SIZE,110,21,43,12,ES_AUTOHSCROLL
+    RTEXT           "Furigana",IDC_STATIC,78,38,29,8
+    EDITTEXT        IDC_FURIGANA_FONT_SIZE,110,37,43,12,ES_AUTOHSCROLL
+    GROUPBOX        "Word highlight colors",IDC_STATIC,7,61,153,63
+    RTEXT           "Default",IDC_STATIC,55,76,24,8
+    EDITTEXT        IDC_DEFAULT_COLOR,83,74,46,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_PICK_DEFAULT_COLOR,137,74,16,11
+    RTEXT           "Words with furigana",IDC_STATIC,13,91,67,8
+    EDITTEXT        IDC_FURIGANA_COLOR,83,90,46,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_PICK_FURIGANA_COLOR,137,90,16,11
+    RTEXT           "Particles",IDC_STATIC,51,107,28,8
+    EDITTEXT        IDC_PARTICLE_COLOR,83,106,46,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_PICK_PARTICLE_COLOR,137,106,16,11
+    DEFPUSHBUTTON   "OK",IDOK,7,133,46,14
+    PUSHBUTTON      "Cancel",IDCANCEL,61,133,46,14
+    PUSHBUTTON      "Apply",IDC_APPLY,115,133,46,14
+END
+
+IDD_WWWJDIC_CONFIG DIALOGEX 0, 0, 232, 71
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "WWWJDIC Config"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,120,50,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,175,50,50,14
+    LTEXT           "Select mirror:",IDC_STATIC,7,7,44,8
+    COMBOBOX        IDC_WWWJDICT_MIRROR_COMBO,7,21,218,77,CBS_DROPDOWN | CBS_SORT | WS_VSCROLL | WS_TABSTOP
+END
+
+IDD_JPARSER_CONFIG DIALOGEX 0, 0, 303, 222
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "JParser Configuration"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    GROUPBOX        "Furigana",IDC_STATIC,7,7,58,69
+    CONTROL         "None",IDC_NO_FURIGANA,"Button",BS_AUTORADIOBUTTON | WS_GROUP,16,20,33,10
+    CONTROL         "Hiragana",IDC_HIRAGANA,"Button",BS_AUTORADIOBUTTON,15,33,45,10
+    CONTROL         "Katakana",IDC_KATAKANA,"Button",BS_AUTORADIOBUTTON,15,46,46,10
+    CONTROL         "Romaji",IDC_ROMAJI,"Button",BS_AUTORADIOBUTTON,15,59,37,10
+    GROUPBOX        "Font sizes",IDC_STATIC,71,7,89,69
+    RTEXT           "Normal",IDC_STATIC,83,23,24,8
+    EDITTEXT        IDC_NORMAL_FONT_SIZE,110,21,43,12,ES_AUTOHSCROLL
+    RTEXT           "Furigana",IDC_STATIC,78,40,29,8
+    EDITTEXT        IDC_FURIGANA_FONT_SIZE,110,39,43,12,ES_AUTOHSCROLL
+    GROUPBOX        "Definition display",IDC_STATIC,165,7,130,69
+    CONTROL         "Verb conjugations",IDC_DISPLAY_VERB_CONJUGATIONS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,16,78,13
+    CONTROL         "Japanese on own line",IDC_JAPANESE_OWN_LINE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,27,87,13
+    CONTROL         "Each definition on own line",IDC_DEFINITION_LINES,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,38,105,13
+    CONTROL         "Reformat numbers",IDC_NUMBER_REFORMAT,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,49,87,13
+    CONTROL         "No brackets around kana",IDC_NO_KANA_BRACKETS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,174,60,109,13
+    GROUPBOX        "Hide text",IDC_STATIC,7,77,288,27
+    CONTROL         "Hide cross references",IDC_HIDE_CROSS_REFS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,89,85,10
+    CONTROL         "Hide parts of speech",IDC_HIDE_POS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,207,89,82,10
+    CONTROL         "Hide usage hints",IDC_HIDE_USAGE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,113,89,69,10
+    GROUPBOX        "Word Highlight Colors",IDC_STATIC,7,108,153,78
+    RTEXT           "Default",IDC_STATIC,54,123,24,8
+    EDITTEXT        IDC_DEFAULT_COLOR,83,121,46,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_PICK_DEFAULT_COLOR,137,121,16,11
+    RTEXT           "Translated words",IDC_STATIC,20,139,56,8
+    EDITTEXT        IDC_TRANSLATION_COLOR,83,137,46,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_PICK_TRANSLATION_COLOR,137,137,16,11
+    RTEXT           "Particles",IDC_STATIC,50,155,28,8
+    EDITTEXT        IDC_PARTICLE_COLOR,83,153,46,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_PICK_PARTICLE_COLOR,137,153,16,11
+    RTEXT           "Words with furigana",IDC_STATIC,11,171,66,8
+    EDITTEXT        IDC_FURIGANA_COLOR,83,169,46,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_PICK_FURIGANA_COLOR,137,169,16,11
+    GROUPBOX        "Tooltip Colors",IDC_STATIC,165,108,130,78
+    RTEXT           "Kanji",IDC_STATIC,196,123,16,8
+    EDITTEXT        IDC_KANJI_COLOR,217,121,46,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_PICK_KANJI_COLOR,271,121,16,11
+    RTEXT           "Kana",IDC_STATIC,195,139,17,8
+    EDITTEXT        IDC_HIRAGANA_COLOR,217,137,46,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_PICK_HIRAGANA_COLOR,271,137,16,11
+    RTEXT           "Parentheses",IDC_STATIC,171,155,41,8
+    EDITTEXT        IDC_PAREN_COLOR,217,153,46,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_PICK_PAREN_COLOR,271,153,16,11
+    RTEXT           "Conjugations",IDC_STATIC,168,171,44,8
+    EDITTEXT        IDC_CONJ_COLOR,217,169,46,12,ES_AUTOHSCROLL
+    PUSHBUTTON      "...",IDC_PICK_CONJ_COLOR,271,169,16,11
+    CONTROL         "Use Mecab hinting",IDC_USE_MECAB,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,13,191,74,10
+    DEFPUSHBUTTON   "OK",IDOK,142,201,46,14
+    PUSHBUTTON      "Cancel",IDCANCEL,196,201,46,14
+    PUSHBUTTON      "Apply",IDC_APPLY,249,201,46,14,WS_DISABLED
+END
+
+IDD_OPTIONS_DIALOG DIALOGEX 0, 0, 293, 311
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Pre-Translation Substitutions"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    GROUPBOX        "Profile",IDC_STATIC,7,7,279,52
+    COMBOBOX        IDC_PROFILE_NAME,14,19,264,157,CBS_DROPDOWNLIST | WS_VSCROLL | WS_TABSTOP
+    LTEXT           "Active profiles are selected based on currently running programs.  More than one profile can be active at a time.  The * profile is always active.",IDC_STATIC,15,36,261,18
+    GROUPBOX        "Add substitution",IDC_STATIC,7,63,279,59
+    LTEXT           "Original text:",IDC_STATIC,15,75,44,8
+    EDITTEXT        IDC_OLD,14,86,129,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_CLIENTEDGE
+    LTEXT           "Replacement text:",IDC_STATIC,150,75,62,8
+    EDITTEXT        IDC_REPLACE,149,86,129,12,ES_AUTOHSCROLL | NOT WS_BORDER,WS_EX_CLIENTEDGE
+    PUSHBUTTON      "Add",ID_ADD,228,102,50,14
+    GROUPBOX        "Profile substitution list",IDC_STATIC,7,125,279,159
+    CONTROL         "",IDC_SUBSTITUTION_LIST,"SysListView32",LVS_REPORT | LVS_SORTASCENDING | LVS_ALIGNLEFT | WS_TABSTOP,14,138,264,121,WS_EX_CLIENTEDGE
+    DEFPUSHBUTTON   "Delete",ID_DELETE,174,264,50,14
+    PUSHBUTTON      "Clear",ID_CLEAR,228,264,50,14
+    DEFPUSHBUTTON   "OK",IDOK,128,290,50,14
+    PUSHBUTTON      "Cancel",IDCANCEL,182,290,50,14
+    PUSHBUTTON      "Apply",IDAPPLY,236,290,50,14,WS_DISABLED
+END
+
+IDD_CONTEXT_MANAGER DIALOGEX 0, 0, 539, 373
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Context Manager"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    LTEXT           "Attached processes:",IDC_STATIC,7,7,67,8
+    CONTROL         "",IDC_PROCESS_LIST,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_ALIGNLEFT | WS_TABSTOP,7,18,247,55,WS_EX_CLIENTEDGE
+    LTEXT           "Context idle delay (ms)",IDC_STATIC,7,78,75,8
+    EDITTEXT        IDC_INTERNAL_IDLE_DELAY,89,76,57,12,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Context history max (KB)",IDC_STATIC,7,95,82,8
+    EDITTEXT        IDC_MAX_HISTORY,89,93,57,12,ES_AUTOHSCROLL | ES_NUMBER
+    LTEXT           "Process contexts:",IDC_STATIC,7,110,58,8
+    CONTROL         "",IDC_CONTEXT_LIST,"SysListView32",LVS_REPORT | LVS_SINGLESEL | LVS_SHOWSELALWAYS | LVS_SORTASCENDING | LVS_ALIGNLEFT | WS_TABSTOP,6,121,247,130,WS_EX_CLIENTEDGE
+    LTEXT           "Context settings:",IDC_STATIC,260,7,60,8
+    CONTROL         "Auto translate",IDC_CONTEXT_AUTO_TRANSLATE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,260,18,62,10
+    CONTROL         "Disable",IDC_CONTEXT_DISABLE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,260,28,39,10
+    CONTROL         "Merge text stream",IDC_CONTEXT_INSTA_MERGE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,324,18,75,10
+    CONTROL         "Merge on flush",IDC_CONTEXT_FLUSH_MERGE,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,324,28,63,10
+    CONTROL         "Translate on Japanese only",IDC_JAPANESE_ONLY,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,413,18,104,10
+    CONTROL         "Handle looping text",IDC_TEXT_LOOPS,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,266,44,78,10
+    GROUPBOX        "Character repeat filter",IDC_STATIC,259,55,139,82
+    CONTROL         "None",IDC_CHAR_REPEAT_NONE,"Button",BS_AUTORADIOBUTTON | WS_GROUP,266,66,33,10
+    CONTROL         "All repeats",IDC_CHAR_REPEAT_INFINITE,"Button",BS_AUTORADIOBUTTON,266,76,61,10
+    CONTROL         "Auto - Constant repeat",IDC_CHAR_REPEAT_AUTO_CONSTANT,
+                    "Button",BS_AUTORADIOBUTTON,265,86,91,10
+    CONTROL         "Auto - Variable repeat",IDC_CHAR_REPEAT_AUTO_ADVANCED,
+                    "Button",BS_AUTORADIOBUTTON,266,96,87,10
+    CONTROL         "Preset repeats(s)",IDC_CHAR_REPEAT_CUSTOM,"Button",BS_AUTORADIOBUTTON,266,106,72,10
+    EDITTEXT        IDC_CHAR_REPEAT_CUSTOM_TEXT,280,119,93,12,ES_AUTOHSCROLL
+    GROUPBOX        "Phrase extension filter (1121231234)",IDC_STATIC,259,141,139,45
+    CONTROL         "None",IDC_PHRASE_EXTENSION_NONE,"Button",BS_AUTORADIOBUTTON | WS_GROUP,266,152,33,10
+    CONTROL         "Basic",IDC_PHRASE_EXTENSION_BASIC,"Button",BS_AUTORADIOBUTTON,266,162,32,10
+    CONTROL         "Aggressive",IDC_PHRASE_EXTENSION_AGGRESSIVE,"Button",BS_AUTORADIOBUTTON,266,172,51,10
+    GROUPBOX        "Phrase repeat filter",IDC_STATIC,259,190,139,61
+    CONTROL         "None",IDC_PHRASE_REPEAT_NONE,"Button",BS_AUTORADIOBUTTON | WS_GROUP,266,201,33,10
+    CONTROL         "Auto",IDC_PHRASE_REPEAT_AUTO,"Button",BS_AUTORADIOBUTTON,266,211,31,10
+    CONTROL         "Custom length range",IDC_PHRASE_REPEAT_CUSTOM,"Button",BS_AUTORADIOBUTTON,266,221,83,10
+    LTEXT           "Min:",IDC_STATIC,280,234,12,8
+    EDITTEXT        IDC_PHRASE_REPEAT_CUSTOM_MIN,295,232,28,12,ES_AUTOHSCROLL
+    LTEXT           "Max:",IDC_STATIC,331,234,17,8
+    EDITTEXT        IDC_PHRASE_REPEAT_CUSTOM_MAX,348,232,28,12,ES_AUTOHSCROLL
+    GROUPBOX        "Line breaks",IDC_STATIC,405,55,127,60
+    CONTROL         "Remove",IDC_LINE_BREAK_REMOVE,"Button",BS_AUTORADIOBUTTON | WS_GROUP,412,66,42,10
+    CONTROL         "Keep",IDC_LINE_BREAK_KEEP,"Button",BS_AUTORADIOBUTTON,412,76,32,10
+    CONTROL         "Keep some",IDC_LINE_BREAK_KEEP_SOME,"Button",BS_AUTORADIOBUTTON,412,86,51,10
+    LTEXT           "First:",IDC_STATIC,424,99,18,8
+    EDITTEXT        IDC_LINE_BREAK_FIRST,442,97,28,12,ES_AUTOHSCROLL
+    LTEXT           "Last:",IDC_STATIC,478,99,17,8
+    EDITTEXT        IDC_LINE_BREAK_LAST,495,97,28,12,ES_AUTOHSCROLL
+    CONTROL         "Display full context history",IDC_CONTEXT_FULL_HISTORY,
+                    "Button",BS_AUTOCHECKBOX | WS_TABSTOP,7,355,101,10
+    LTEXT           "Port:",IDC_STATIC,137,355,17,8
+    EDITTEXT        IDC_HOOK_PORT,158,353,42,12,ES_AUTOHSCROLL | ES_NUMBER
+    EDITTEXT        IDC_CONTEXT_TEXT,7,257,525,89,ES_MULTILINE | ES_AUTOVSCROLL | ES_READONLY | WS_VSCROLL
+    DEFPUSHBUTTON   "Done",IDOK,482,352,50,14
+    CONTROL         "Auto copy to clipboard",IDC_AUTO_CLIPBOARD,"Button",BS_AUTOCHECKBOX | WS_TABSTOP,413,28,88,10
+END
+
+IDD_AGTH_CONVERSION_TOOL DIALOGEX 0, 0, 234, 66
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "AGTH Code Conversion Tool"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    PUSHBUTTON      "Close",IDCANCEL,177,45,50,14
+    LTEXT           "AGTH /H code",IDC_STATIC,7,9,46,8
+    EDITTEXT        IDC_AGTH_CODE,58,7,169,12,ES_AUTOHSCROLL
+    LTEXT           "TA code",IDC_STATIC,7,27,27,8
+    EDITTEXT        IDC_TA_CODE,58,25,169,12,ES_AUTOHSCROLL | ES_READONLY
+    PUSHBUTTON      "Add",IDC_ADD,119,45,50,14,WS_DISABLED
+END
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    IDD_INJECT_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 510
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 344
+    END
+
+    IDD_MECAB_CONFIG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 160
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 147
+    END
+
+    IDD_WWWJDIC_CONFIG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 225
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 64
+    END
+
+    IDD_JPARSER_CONFIG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 295
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 215
+    END
+
+    IDD_OPTIONS_DIALOG, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 286
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 304
+    END
+
+    IDD_CONTEXT_MANAGER, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 532
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 366
+    END
+
+    IDD_AGTH_CONVERSION_TOOL, DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 227
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 59
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+#endif    // English (United States) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+

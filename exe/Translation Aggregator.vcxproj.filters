@@ -1,0 +1,426 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{140abae3-6807-4ab1-8b7f-0eaeb3fcddf4}</UniqueIdentifier>
+      <Extensions>cpp;c;cxx;rc;def;r;odl;idl;hpj;bat</Extensions>
+    </Filter>
+    <Filter Include="Source Files\Dialogs">
+      <UniqueIdentifier>{bafe3369-0627-4f48-8a1a-94b6b87fa2df}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\Util">
+      <UniqueIdentifier>{78858a98-ba61-408b-96ad-ffd55a49a321}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\History">
+      <UniqueIdentifier>{36e93bf2-e8be-4799-877f-72533f84d65a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TranslationWindows">
+      <UniqueIdentifier>{3bc394fe-28c4-49ff-bfa4-9e0a43856972}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TranslationWindows\HttpWindows">
+      <UniqueIdentifier>{c58686ae-0ca0-4cc4-9fbb-716ae070c54e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\TranslationWindows\LocalWindows">
+      <UniqueIdentifier>{2e052600-6696-4ab8-b8e3-81c9ba414bbf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Header">
+      <UniqueIdentifier>{cecbbe67-a365-4107-9b69-68f3fa6f86de}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{994da516-270c-4b2e-9709-81b6b99de4a8}</UniqueIdentifier>
+      <Extensions>ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe</Extensions>
+    </Filter>
+    <Filter Include="3rd Party">
+      <UniqueIdentifier>{b5107487-f36a-4857-8cdd-823a2eca2ca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="3rd Party\zlib">
+      <UniqueIdentifier>{d1569b2f-ae42-4df6-8245-dea0fe86278d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shared">
+      <UniqueIdentifier>{c9f27451-5d26-48d0-bcc9-0af517125052}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="BufferedSocket.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Config.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Context.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Filter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Translation Aggregator.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialogs\InjectionDialog.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="Dialogs\MyToolTip.cpp">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClCompile>
+    <ClCompile Include="util\Dictionary.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\DictionaryUtil.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\HttpUtil.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\Injector.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\Mecab.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\Regexp.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="util\Value.cpp">
+      <Filter>Source Files\Util</Filter>
+    </ClCompile>
+    <ClCompile Include="History\History.cpp">
+      <Filter>Source Files\History</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\TranslationWindow.cpp">
+      <Filter>Source Files\TranslationWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\TranslationWindowFactory.cpp">
+      <Filter>Source Files\TranslationWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\BabelfishWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\BingWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\ExciteWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\GoogleWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\HonyakuWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\HttpWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\JdicWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\LocalWindows\AtlasWindow.cpp">
+      <Filter>Source Files\TranslationWindows\LocalWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\LocalWindows\FuriganaWindow.cpp">
+      <Filter>Source Files\TranslationWindows\LocalWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\LocalWindows\JParseWindow.cpp">
+      <Filter>Source Files\TranslationWindows\LocalWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\LocalWindows\MecabWindow.cpp">
+      <Filter>Source Files\TranslationWindows\LocalWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\LocalWindows\UntranslatedWindow.cpp">
+      <Filter>Source Files\TranslationWindows\LocalWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\Shrink.cpp">
+      <Filter>Header</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\Atlas.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\DllInjection.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\HookEval.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\Lock.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\ProcessUtil.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\ReadWriteLock.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\StringUtil.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\TextHookParser.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\TextRuleSet.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\Thread.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd Party\zlib\adler32.c">
+      <Filter>3rd Party\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd Party\zlib\crc32.c">
+      <Filter>3rd Party\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd Party\zlib\gzclose.c">
+      <Filter>3rd Party\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd Party\zlib\gzlib.c">
+      <Filter>3rd Party\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd Party\zlib\gzread.c">
+      <Filter>3rd Party\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd Party\zlib\inffast.c">
+      <Filter>3rd Party\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd Party\zlib\inflate.c">
+      <Filter>3rd Party\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd Party\zlib\inftrees.c">
+      <Filter>3rd Party\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\3rd Party\zlib\zutil.c">
+      <Filter>3rd Party\zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\BabylonWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\FreeTranslationWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\SDLWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\SysTranWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="..\shared\EUCJPtoUTF16.cpp">
+      <Filter>Shared</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\LECOnlineWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\LocalWindows\LECWindow.cpp">
+      <Filter>Source Files\TranslationWindows\LocalWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\BaiduWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\InfoseekWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+    <ClCompile Include="TranslationWindows\HttpWindows\YandexWindow.cpp">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="BufferedSocket.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Config.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Context.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Filter.h">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialogs\InjectionDialog.h">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="Dialogs\MyToolTip.h">
+      <Filter>Source Files\Dialogs</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Dictionary.h">
+      <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\DictionaryUtil.h">
+      <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\HttpUtil.h">
+      <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Injector.h">
+      <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Mecab.h">
+      <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Regexp.h">
+      <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="util\Value.h">
+      <Filter>Source Files\Util</Filter>
+    </ClInclude>
+    <ClInclude Include="History\History.h">
+      <Filter>Source Files\History</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\TranslationWindow.h">
+      <Filter>Source Files\TranslationWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\TranslationWindowFactory.h">
+      <Filter>Source Files\TranslationWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\BabelfishWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\BingWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\ExciteWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\GoogleWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\HonyakuWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\HttpWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\JdicWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\LocalWindows\AtlasWindow.h">
+      <Filter>Source Files\TranslationWindows\LocalWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\LocalWindows\FuriganaWindow.h">
+      <Filter>Source Files\TranslationWindows\LocalWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\LocalWindows\JParseWindow.h">
+      <Filter>Source Files\TranslationWindows\LocalWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\LocalWindows\MecabWindow.h">
+      <Filter>Source Files\TranslationWindows\LocalWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\LocalWindows\UntranslatedWindow.h">
+      <Filter>Source Files\TranslationWindows\LocalWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\Shrink.h">
+      <Filter>Header</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Resource Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd Party\zlib\zutil.h">
+      <Filter>3rd Party\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\Atlas.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\ConversionTable.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\DllInjection.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\HookEval.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\InjectionSettings.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\Lock.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\ProcessUtil.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\ReadWriteLock.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\scoped_ptr.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\StringUtil.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\TAPlugin.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\TextHookParser.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\TextRuleSet.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\shared\Thread.h">
+      <Filter>Shared</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd Party\zlib\crc32.h">
+      <Filter>3rd Party\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd Party\zlib\gzguts.h">
+      <Filter>3rd Party\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd Party\zlib\inffast.h">
+      <Filter>3rd Party\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd Party\zlib\inffixed.h">
+      <Filter>3rd Party\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd Party\zlib\inflate.h">
+      <Filter>3rd Party\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd Party\zlib\inftrees.h">
+      <Filter>3rd Party\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd Party\zlib\zconf.h">
+      <Filter>3rd Party\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\3rd Party\zlib\zlib.h">
+      <Filter>3rd Party\zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\BabylonWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\FreeTranslationWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\SDLWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\SysTranWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\LECOnlineWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\LocalWindows\LECWindow.h">
+      <Filter>Source Files\TranslationWindows\LocalWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\BaiduWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\InfoseekWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+    <ClInclude Include="TranslationWindows\HttpWindows\YandexWindow.h">
+      <Filter>Source Files\TranslationWindows\HttpWindows</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="icon1.ico">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="toolbar.bmp">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="..\shared\ConversionTable.cpp">
+      <Filter>Shared</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Translation Aggregator.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

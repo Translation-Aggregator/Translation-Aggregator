@@ -1,0 +1,8 @@
+LIBRARY      "SampleDll"
+
+EXPORTS
+	TAPluginGetVersion
+	TAPluginInitialize
+	TAPluginModifyStringPreSubstitution
+	TAPluginFree
+

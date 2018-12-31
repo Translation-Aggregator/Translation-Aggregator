@@ -1,0 +1,1 @@
+int disasm(BYTE* opcode0);
