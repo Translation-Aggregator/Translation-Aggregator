@@ -4,7 +4,7 @@
 #include "../../util/HttpUtil.h"
 #include "exe/History/History.h"
 
-extern const wchar_t userAgent[] = L"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:63.0) Gecko/20100101 Firefox/63.0";
+extern const wchar_t userAgent[] = L"Mozilla/5.0 TranslationAggregator";
 
 int numHttpWindows = 0;
 HINTERNET hHttpSession[3] = {0, 0, 0}; // Connection 2 (3) is a google specific connection which will be reset every n connections
@@ -476,7 +476,7 @@ void HttpWindow::TryMakeRequest()
 		return;
 	}
 
-	hRequest = WinHttpOpenRequest(hConnect, pType, path, 0, referrer, WINHTTP_DEFAULT_ACCEPT_TYPES, port == 443 ? WINHTTP_FLAG_SECURE : 0);
+	hRequest = WinHttpOpenRequest(hConnect, pType, path, 0, referrer, WINHTTP_DEFAULT_ACCEPT_TYPES, WINHTTP_FLAG_ESCAPE_DISABLE | (port == 443 ? WINHTTP_FLAG_SECURE : 0));
 	free(path);
 
 
@@ -485,7 +485,7 @@ void HttpWindow::TryMakeRequest()
 		WinHttpSendRequest(hRequest, requestHeaders, wcslen(requestHeaders), postData, postLen, postLen, 0);
 		WinHttpReceiveResponse(hRequest, NULL);
 		WinHttpCloseHandle(hRequest);
-		hRequest = WinHttpOpenRequest(hConnect, L"GET", secondRequest, 0, referrer, WINHTTP_DEFAULT_ACCEPT_TYPES, port == 443 ? WINHTTP_FLAG_SECURE : 0);
+		hRequest = WinHttpOpenRequest(hConnect, L"GET", secondRequest, 0, referrer, WINHTTP_DEFAULT_ACCEPT_TYPES, WINHTTP_FLAG_ESCAPE_DISABLE | (port == 443 ? WINHTTP_FLAG_SECURE : 0));
 		free(postData);
 		postData = NULL;
 		postLen = 0;

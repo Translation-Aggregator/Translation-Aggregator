@@ -40,7 +40,7 @@
 
 // Simple way of ensuring a clean build before release.
 #define APP_NAME L"TranslationAggregator"
-#define APP_VERSION CUR_TIME L"-" GIT_HASH L" (Unofficial)"
+#define APP_VERSION GIT_TAG L" (Unofficial)"
 
 #define HTTP_REQUEST_ID L"TRAG/" APP_VERSION
 
