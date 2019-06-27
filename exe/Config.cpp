@@ -10,7 +10,8 @@
 
 Config config;
 
-#define INI APP_NAME L".ini"
+// #define INI APP_NAME L".ini"
+#define INI L"TranslationAggregator.ini"
 
 #define RANGE_MAX 100000
 

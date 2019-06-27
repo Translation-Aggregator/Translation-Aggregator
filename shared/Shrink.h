@@ -39,7 +39,7 @@
 //#include <Dwrite.h>
 
 // Simple way of ensuring a clean build before release.
-#define APP_NAME L"TranslationAggregator"
+#define APP_NAME L"Translation Aggregator"
 #define APP_VERSION GIT_TAG L" (Unofficial)"
 
 #define HTTP_REQUEST_ID L"TRAG/" APP_VERSION
