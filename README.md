@@ -24,26 +24,26 @@ Pre-translation substitutions modify input text before it's sent to any translat
 
 JParser tends to be a better choice for those who know almost no Japanese - it tells you how verbs are conjugated, handles some expressions, etc. MeCab may well be the better choice for those who know some Japanese, however.
 
-Source in this repository is available under the GPL v2. Please read `LICENSE` for more details.
+Source in this repository is available under the **GPL v2**. Please read `LICENSE` for more details.
 
-Thanks to (In alphabetical order, sorry if I'm leaving anyone out):
-**Hongfire Members**:
-**Freaka** for his innumerable feature suggestions and reported issues over the course of development.
-**Setsumi** for [TA Helper](http://hongfire.com/forum/showpost.php?p=1811363&postcount=195) and for all his suggested improvements and reported issues, particularly with JParser.
-**Setx** for AGTH.
-**Stomp** for fixing the open file dialog not working properly on some systems and adding the tooltip font dialog, and fixing a bug that required admin privileges when certain other software was installed.
-Might sound like minor contributions, but feedback really drives the development of TA.
+Thanks to (In alphabetical order, sorry if I'm leaving anyone out):  
+**Hongfire Members**:  
+**Freaka** for his innumerable feature suggestions and reported issues over the course of development.  
+**Setsumi** for [TA Helper](https://github.com/setsumi/TAHelper) and for all his suggested improvements and reported issues, particularly with JParser.  
+**Setx** for AGTH.  
+**Stomp** for fixing the open file dialog not working properly on some systems and adding the tooltip font dialog, and fixing a bug that required admin privileges when certain other software was installed.  
+Might sound like minor contributions, but feedback really drives the development of TA.  
 
-**Non-members**:
-**KingMike** of KingMike's Translations, who is apparently the creator of the EUC-JP table I used to generate my own conversion table.
-**Nasser R. Rowhani** for his function hooking code.
-**Z0mbie** for writing the [opcode length detector/disassembler](http://hack-expo.void.ru/groups/blt/text/disasm.txt) I use for hooking. Apparently was intended for virus-related use, but works fine for other things, too.
-And the creators and maintainers of **edict**, **MeCab**, and **zlib**.
+**Non-members**:  
+**KingMike** of KingMike's Translations, who is apparently the creator of the EUC-JP table I used to generate my own conversion table.  
+**Nasser R. Rowhani** for his function hooking code.  
+**Z0mbie** for writing the [opcode length detector/disassembler](http://hack-expo.void.ru/groups/blt/text/disasm.txt) I use for hooking. Apparently was intended for virus-related use, but works fine for other things, too.  
+And the creators and maintainers of **edict**, **MeCab**, and **zlib**.  
 
 You might also be interested in:
-* Setsumi's TA Helper and AGTHGrab.
-* errotzol's replacements script.
-* Devocalypse's devOSD.
-* kaosu's ITH (Like AGTH. No direct TA support, due to lack of a command line interface, but definitely worth checking out).
+* **Setsumi**'s [TA Helper](https://github.com/setsumi/TAHelper) and [AGTHGrab](http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/68499-translation-aggregator/page13?postcount=195#post2139294).
+* **errotzol**'s [replacements script](http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/68499-translation-aggregator?p=2766594#post2766594).
+* **Devocalypse**'s [devOSD](http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/114249-devosd-a-japanese-galge-eroge-visual-novel-translation-helper?t=139063).
+* **kaosu**'s [ITH](http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/185725-interactive-text-hooker-new-text-extraction-tool?t=208860) (Like AGTH. No direct TA support, due to lack of a command line interface, but definitely worth checking out).
 * [MeCab](http://taku910.github.io/mecab/)
 * [edict2](http://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project)
