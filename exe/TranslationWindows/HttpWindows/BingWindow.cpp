@@ -1,11 +1,11 @@
 #include <Shared/Shrink.h>
 #include "BingWindow.h"
 
-BingWindow::BingWindow() : HttpWindow(L"Bing", L"https://www.bing.com/ttranslate/")
+BingWindow::BingWindow() : HttpWindow(L"Bing", L"https://www.bing.com/ttranslatev3/")
 {
 	host = L"www.bing.com";
-	path = L"/ttranslate";
-	postPrefixTemplate = "&text=%s&from=%s&to=%s";
+	path = L"/ttranslatev3";
+	postPrefixTemplate = "&text=%s&fromLang=%s&to=%s";
 	port = 80;
 	requestHeaders = L"Content-Type: application/x-www-form-urlencoded";
 	dontEscapeRequest = true;
@@ -16,7 +16,7 @@ BingWindow::~BingWindow()
 
 wchar_t *BingWindow::FindTranslatedText(wchar_t* html)
 {
-	if (!ParseJSON(html, L"\"translationResponse\":\"", L"\"translationResponse\":\""))
+	if (!ParseJSON(html, L"\"text\":\"", L"\"text\":\""))
 		return NULL;
 	return html;
 }
