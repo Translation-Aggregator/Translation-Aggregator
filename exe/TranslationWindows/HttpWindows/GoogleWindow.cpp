@@ -179,6 +179,20 @@ wchar_t *GoogleWindow::GetTranslationPath(Language src, Language dst, const wcha
 	// return out;
 }
 
+static bool IsHash(const std::wstring& result)
+{
+	return std::all_of(result.begin(), result.end(), [](auto ch) { return (ch >= L'0' && ch <= L'9') || (ch >= L'a' && ch <= L'z'); });
+}
+
+static std::wstring ReplaceString(std::wstring subject, const std::wstring& search, const std::wstring& replace) {
+	size_t pos = 0;
+	while ((pos = subject.find(search, pos)) != std::wstring::npos) {
+		subject.replace(pos, search.length(), replace);
+		pos += replace.length();
+	}
+	return subject;
+}
+
 wchar_t *GoogleWindow::FindTranslatedText(wchar_t* html)
 {
 #if 0
@@ -199,13 +213,13 @@ wchar_t *GoogleWindow::FindTranslatedText(wchar_t* html)
 	ps[d - 1] = 0;
 	return html;
 #else
-	wchar_t *end;
-	if ((html = wcsstr(html, L"[[[\"")) && (end = wcsstr(html += 4, L"]],")))
+	if (html[0] == L'[')
 	{
-
-		*end = 0;
-		ParseJSON(html, NULL, L"],[\"", true);
-		return html;
+		std::wstring response(html);
+		std::wstring translation;
+		for (std::wsmatch results; std::regex_search(response, results, std::wregex(L"\\[\"(.*?)\",[n\"]")); response = results.suffix())
+			if (!IsHash(results[1])) translation += ReplaceString(std::wstring(results[1]), L"\\n", L"\n") + L" ";
+		if (!translation.empty()) return const_cast<wchar_t*>(translation.c_str());
 	}
 	return NULL;
 #endif
