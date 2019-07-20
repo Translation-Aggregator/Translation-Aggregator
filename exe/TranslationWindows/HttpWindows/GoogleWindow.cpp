@@ -107,7 +107,7 @@ std::wstring tk(const wchar_t *pStr, std::string translateFrom, std::string tran
 	a %= 1000000;
 	b ^= a;
 
-	return L"/translate_a/single?client=t&dt=ld&dt=rm&dt=t&sl=" + StringToWideString(translateFrom) + L"&tl=" + StringToWideString(translateTo) + L"&ie=UTF-8&oe=UTF-8&tk=" + std::to_wstring(a) + L"." + std::to_wstring(b) + L"&q=" + escapedText;
+	return L"/translate_a/single?client=webapp&dt=ld&dt=rm&dt=t&sl=" + StringToWideString(translateFrom) + L"&tl=" + StringToWideString(translateTo) + L"&ie=UTF-8&oe=UTF-8&tk=" + std::to_wstring(a) + L"." + std::to_wstring(b) + L"&q=" + escapedText;
 }
 #endif
 
@@ -117,7 +117,7 @@ GoogleWindow::GoogleWindow() : HttpWindow(L"Google", L"https://translate.google.
 #ifndef TKK
 	path = L"/translate_a/single?client=gtx&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&q=%s";
 #else
-	path = L"/translate_a/single?client=t&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&tk=%hs&q=%s";
+	path = L"/translate_a/single?client=webapp&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&tk=%hs&q=%s";
 #endif
 	port = 443;
 	dontEscapeRequest = true;
