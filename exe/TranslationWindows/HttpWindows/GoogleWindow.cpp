@@ -181,7 +181,7 @@ wchar_t *GoogleWindow::GetTranslationPath(Language src, Language dst, const wcha
 
 static bool IsHash(const std::wstring& result)
 {
-	return std::all_of(result.begin(), result.end(), [](auto ch) { return (ch >= L'0' && ch <= L'9') || (ch >= L'a' && ch <= L'z'); });
+	return result.size() == 32 && std::all_of(result.begin(), result.end(), [](auto ch) { return (ch >= L'0' && ch <= L'9') || (ch >= L'a' && ch <= L'z'); });
 }
 
 static std::wstring ReplaceString(std::wstring subject, const std::wstring& search, const std::wstring& replace) {
@@ -219,7 +219,7 @@ wchar_t *GoogleWindow::FindTranslatedText(wchar_t* html)
 		std::wstring translation;
 		for (std::wsmatch results; std::regex_search(response, results, std::wregex(L"\\[\"(.*?)\",[n\"]")); response = results.suffix())
 			if (!IsHash(results[1])) translation += ReplaceString(std::wstring(results[1]), L"\\n", L"\n") + L" ";
-		if (!translation.empty()) return const_cast<wchar_t*>(translation.c_str());
+		if (!translation.empty()) return const_cast<wchar_t*>(_wcsdup(translation.c_str()));
 	}
 	return NULL;
 #endif
