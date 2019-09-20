@@ -78,15 +78,19 @@ inline std::optional<std::wstring> ReceiveHttpRequest(HINTERNET request)
 
 static HINTERNET internet = NULL;
 
-std::wstring tk(const wchar_t *pStr, std::string translateFrom, std::string translateTo)
-{
-	if (!tkk_id)
+void try_retrieve_token(bool force = false) {
+	if (!tkk_id || force)
 		if (!internet) internet = WinHttpOpen(L"Mozilla/5.0 TranslationAggregator", WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, NULL, NULL, 0);
 			if (InternetHandle connection = WinHttpConnect(internet, L"translate.google.com", INTERNET_DEFAULT_HTTPS_PORT, 0))
 				if (InternetHandle request = WinHttpOpenRequest(connection, L"GET", L"/", NULL, NULL, NULL, WINHTTP_FLAG_SECURE))
 					if (WinHttpSendRequest(request, NULL, 0, NULL, 0, 0, NULL))
 						if (auto response = ReceiveHttpRequest(request))
 							if (std::wsmatch results; std::regex_search(response.value(), results, std::wregex(L"(\\d{7,})'"))) tkk_id = stoll(results[1]);
+}
+
+std::wstring tk(const wchar_t *pStr, std::string translateFrom, std::string translateTo)
+{
+	try_retrieve_token(false);
 	if (!tkk_id)
 		return L"";
 	std::wstring escapedText;
@@ -221,6 +225,7 @@ wchar_t *GoogleWindow::FindTranslatedText(wchar_t* html)
 			if (!IsHash(results[1])) translation += ReplaceString(std::wstring(results[1]), L"\\n", L"\n") + L" ";
 		if (!translation.empty()) return const_cast<wchar_t*>(_wcsdup(translation.c_str()));
 	}
+	tkk_id = 0;
 	return NULL;
 #endif
 }
@@ -419,4 +424,10 @@ char* GoogleWindow::GetLangIdString(Language lang, int src)
 		default:
 			return 0;
 	}
+}
+
+char *GoogleWindow::GetTranslationPrefix(Language src, Language dst, const char *text)
+{
+	try_retrieve_token(false);
+	return HttpWindow::GetTranslationPrefix(src, dst, text);
 }
