@@ -81,10 +81,11 @@ std::string e(const char *pStr)
 }
 
 
-BaiduWindow::BaiduWindow() : HttpWindow(L"Baidu", L"http://fanyi.baidu.com/")
+BaiduWindow::BaiduWindow() : HttpWindow(L"Baidu", L"https://fanyi.baidu.com/")
 {
 	host = L"fanyi.baidu.com";
 	path = L"/v2transapi";
+	port = 443;
 	postPrefixTemplate = "from=%s&to=%s&query=%s&token=%s&sign=%s";
 	requestHeaders = L"Content-Type: application/x-www-form-urlencoded; charset=UTF-8;";
 	dontEscapeRequest = true;
