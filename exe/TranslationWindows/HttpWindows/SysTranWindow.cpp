@@ -2,13 +2,25 @@
 #include "SysTranWindow.h"
 #include "../../util/HttpUtil.h"
 
-SysTranWindow::SysTranWindow() : HttpWindow(L"SysTran", L"http://www.systranet.com/translate")
+#include <locale>
+#include <codecvt>
+#include <3rdParty/PicoSHA2/picosha2.h>
+
+SysTranWindow::SysTranWindow() : HttpWindow(L"SysTran", L"https://translate.systran.net")
 {
-	host = L"www.systranet.com";
-	path = L"/sai?lp=%hs_%hs&service=systranettranslate";
-	postPrefixTemplate = "";
+	host = L"translate.systran.net";
+	path = L"/translate/html";
+	m_cookiePath = L"/translationTools/text";
+	port = 443;
+	postPrefixTemplate = "{\"profileId\":null,\"owner\":null,\"domain\":null,\"size\":\"M\",\"input\":\"%s\",\"source\":\"%s\",\"target\":\"%s\"}";
+	m_baseRequestHeaders = L"X-Requested-With: XMLHttpRequest\nContent-Type: application/json";
+	requestHeaders = nullptr;
+	//	requestHeaders = nullptr;
+	impersonateIE = 1;
 	dontEscapeRequest = true;
 }
+
+#define TARGET_START L"\"target\":\"\\n\\n"
 
 wchar_t *SysTranWindow::FindTranslatedText(wchar_t* html)
 {
@@ -19,6 +31,9 @@ wchar_t *SysTranWindow::FindTranslatedText(wchar_t* html)
 	if (html[len - 1] == ';')
 		html[len - 1] = 0;
 	UnescapeHtml(html, 0);
+	html = wcsstr(html, TARGET_START) + wcslen(TARGET_START);
+	wchar_t* end = wcsstr(html, L"\",\"selectedRoutes");
+	end[0] = 0;
 	return html;
 }
 
@@ -70,6 +85,26 @@ char *SysTranWindow::GetTranslationPrefix(Language src, Language dst, const char
 	if (!text)
 		return (char*)1;
 
+	char *pSrcString;
+	char *pDstString;
+	if (!(pSrcString = GetLangIdString(src, 1)) || !(pDstString = GetLangIdString(dst, 0)) || !strcmp(pSrcString, pDstString))
+		return 0;
+
+	std::wstring_convert<std::codecvt_utf8_utf16<wchar_t>> converter;
+
+	if (m_cookie.empty())
+	{
+		GetCookie();
+		m_baseRequestHeaders += L"\nCookie: " + m_cookie;
+
+		//		m_baseRequestHeaders = L"X-Requested-With: XMLHttpRequest\nContent-Type: application/json\nCookie: lang=en; ses.sid=s%3AN0exZKvgp7PyB2YnBR0I2cSkUj3Od32G.DbvLd%2B2bzR2aUp1Mb2k3TL97aONazub%2F%2FgUg7WVuveY";
+
+		getToken();
+		m_baseRequestHeaders += L"\nX-CSRF-Token: " + converter.from_bytes(m_token);
+		//		m_baseRequestHeaders += L"\nX-CSRF-Token: SffUjstv-6lfEZZV9lMDYiJ-n0evPnvg9-Vs";
+
+	}
+
 	size_t len = 27;
 	const char *p;
 	for (p = text; *p; p++)
@@ -81,9 +116,9 @@ char *SysTranWindow::GetTranslationPrefix(Language src, Language dst, const char
 			case '&': len += 4; break;
 		}
 	len += p - text;
-	char *data = (char*)malloc(len);
-	strcpy(data, "<html><body>");
-	char *d = data + 12;
+	char *data = (char*)calloc(len, sizeof(char));
+	char *d = data;
+
 	for (p = text; *p; p++)
 		switch (*p)
 		{
@@ -91,9 +126,88 @@ char *SysTranWindow::GetTranslationPrefix(Language src, Language dst, const char
 			case '<': strcpy(d, "&lt;"); d += 4; break;
 			case '>': strcpy(d, "&gt;"); d += 4; break;
 			case '&': strcpy(d, "&amp;"); d += 5; break;
+			case '"': strcpy(d, "&quot;"); d += 6; break;
 			default: *d++ = *p;
 		}
 	strcpy(d, "</body></html>");
 
-	return data;
+	std::string seq = m_token + "." + std::string(pSrcString) + "." + std::string(pDstString) + "." + std::string(data);
+	std::string hash;
+	picosha2::hash256_hex_string(seq, hash);
+
+
+	m_requestHeaders = m_baseRequestHeaders + L"\nx-translation-signature: " + converter.from_bytes(hash);
+	//	m_requestHeaders = L"X-Requested-With: XMLHttpRequest\nX-CSRF-Token: SffUjstv-6lfEZZV9lMDYiJ-n0evPnvg9-Vs\nContent-Type: application/json\nCookie: lang=en; ses.sid=s%3AN0exZKvgp7PyB2YnBR0I2cSkUj3Od32G.DbvLd%2B2bzR2aUp1Mb2k3TL97aONazub%2F%2FgUg7WVuveY\nx-translation-signature: b53bf3d37a8d53de3bf8c8673aba6d654e8ef25cccf5d4d551e52113b11d00ff";
+
+	size_t size = strlen(data) + strlen(pSrcString) + strlen(pDstString) + strlen(postPrefixTemplate);
+
+	char *pJson = reinterpret_cast<char*>(calloc(size, sizeof(char)));
+
+	snprintf(pJson, size * sizeof(char), postPrefixTemplate, data, pSrcString, pDstString);
+
+	free(data);
+
+	delete requestHeaders;
+	requestHeaders = reinterpret_cast<wchar_t*>(calloc(m_requestHeaders.size() + 1, sizeof(wchar_t)));
+	wcscpy(requestHeaders, m_requestHeaders.c_str());
+
+	return pJson;
+}
+
+#define X_TOKEN "'X-CSRF-Token': '"
+
+void SysTranWindow::getToken()
+{
+	extern HINTERNET hHttpSession[3];
+	DWORD dwSize = 0;
+	LPSTR pszOutBuffer = "";
+	DWORD dwDownloaded = 0;
+	std::string site;
+
+	if (HINTERNET hConnect = WinHttpConnect(hHttpSession[impersonateIE], host, port, 0))
+	{
+		if (HINTERNET hRequest = WinHttpOpenRequest(hConnect, L"GET", L"/translationTools/text", 0, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, port == 443 ? WINHTTP_FLAG_SECURE : 0))
+		{
+			// TODO: error here, no cookie forwarding
+			if (WinHttpSendRequest(hRequest, m_baseRequestHeaders.c_str(), m_baseRequestHeaders.length(), WINHTTP_NO_REQUEST_DATA, 0, 0, 0))
+			{
+				if (WinHttpReceiveResponse(hRequest, NULL))
+				{
+					DWORD dwSize = 0;
+					DWORD dwDownloaded = 0;
+					do
+					{
+						// Check for available data.
+						dwSize = 0;
+						if (WinHttpQueryDataAvailable(hRequest, &dwSize))
+						{
+							// Allocate space for the buffer.
+							LPSTR pszOutBuffer = new char[dwSize + 1];
+							if (pszOutBuffer)
+							{
+								// Read the Data.
+								ZeroMemory(pszOutBuffer, dwSize + 1);
+
+								if (WinHttpReadData(hRequest, (LPVOID)pszOutBuffer, dwSize, &dwDownloaded))
+									site.append(pszOutBuffer);
+
+								// Free the memory allocated to the buffer.
+								delete[] pszOutBuffer;
+							}
+						}
+					} while (dwSize > 0);
+				}
+			}
+			int err = GetLastError();
+			WinHttpCloseHandle(hRequest);
+		}
+		WinHttpCloseHandle(hConnect);
+	}
+
+	if (!site.empty())
+	{
+		uint32_t posS = site.find(X_TOKEN) + std::string(X_TOKEN).length();
+		uint32_t posE = site.find("'", posS);
+		m_token = site.substr(posS, posE - posS);
+	}
 }
