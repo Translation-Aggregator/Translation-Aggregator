@@ -129,7 +129,6 @@ char *SysTranWindow::GetTranslationPrefix(Language src, Language dst, const char
 			case '"': strcpy(d, "&quot;"); d += 6; break;
 			default: *d++ = *p;
 		}
-	strcpy(d, "</body></html>");
 
 	std::string seq = m_token + "." + std::string(pSrcString) + "." + std::string(pDstString) + "." + std::string(data);
 	std::string hash;

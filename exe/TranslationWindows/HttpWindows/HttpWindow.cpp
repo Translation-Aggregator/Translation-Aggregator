@@ -645,9 +645,9 @@ void HttpWindow::GetCookie()
 						}
 					}
 				}
-				WinHttpCloseHandle(hRequest);
 			}
-			WinHttpCloseHandle(hConnect);
+			WinHttpCloseHandle(hRequest);
 		}
+		WinHttpCloseHandle(hConnect);
 	}
 }
