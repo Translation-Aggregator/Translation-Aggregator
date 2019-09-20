@@ -7,6 +7,7 @@ class HttpWindow : public TranslationWindow
 public:
 	int WndProc (LRESULT *output, UINT uMsg, WPARAM wParam, LPARAM lParam);
 	friend void CALLBACK HttpCallback(HINTERNET hInternet2, DWORD_PTR dwContext, DWORD dwInternetStatus, LPVOID lpvStatusInformation, DWORD dwStatusInformationLength);
+	friend void CALLBACK HttpCookieCallback(HINTERNET hInternet2, DWORD_PTR dwContext, DWORD dwInternetStatus, LPVOID lpvStatusInformation, DWORD dwStatusInformationLength);
 	HttpWindow(wchar_t *type, wchar_t *srcUrl, unsigned int flags=0);
 	virtual ~HttpWindow();
 
@@ -85,5 +86,7 @@ protected:
 	}
 
 	void GetCookie();
-	wchar_t *m_pCookie;
+	HANDLE m_hCookieHttpEvent;
+	std::wstring m_cookie;
+	std::wstring m_cookiePath;
 };

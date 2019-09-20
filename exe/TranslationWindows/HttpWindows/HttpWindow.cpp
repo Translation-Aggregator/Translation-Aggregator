@@ -10,6 +10,7 @@ int numHttpWindows = 0;
 HINTERNET hHttpSession[3] = {0, 0, 0}; // Connection 2 (3) is a google specific connection which will be reset every n connections
 
 void CALLBACK HttpCallback(HINTERNET hInternet, DWORD_PTR dwContext, DWORD dwInternetStatus, LPVOID lpvStatusInformation, DWORD dwStatusInformationLength);
+void CALLBACK HttpCookieCallback(HINTERNET hInternet, DWORD_PTR dwContext, DWORD dwInternetStatus, LPVOID lpvStatusInformation, DWORD dwStatusInformationLength);
 
 int MakeInternet(int impersonateIE)
 {
@@ -305,6 +306,15 @@ void CALLBACK HttpCallback(HINTERNET hInternet, DWORD_PTR dwContext, DWORD dwInt
 	}
 }
 
+void CALLBACK HttpCookieCallback(HINTERNET hInternet, DWORD_PTR dwContext, DWORD dwInternetStatus, LPVOID lpvStatusInformation, DWORD dwStatusInformationLength)
+{
+	HttpWindow *w = (HttpWindow *)dwContext;
+	if (!w) return;
+
+	if(dwInternetStatus == WINHTTP_CALLBACK_STATUS_SENDREQUEST_COMPLETE || dwInternetStatus == WINHTTP_CALLBACK_STATUS_HEADERS_AVAILABLE)
+		SetEvent(w->m_hCookieHttpEvent);
+}
+
 wchar_t *HttpEscapeParamW(const wchar_t *src, int len)
 {
 	wchar_t *out = (wchar_t*) malloc(sizeof(wchar_t)*(3*len+1));
@@ -525,7 +535,8 @@ void AddHttpWindow()
 HttpWindow::HttpWindow(wchar_t *type, wchar_t *srcUrl, unsigned int flags) :
 	TranslationWindow(type, 1, srcUrl, flags),
 	in_progress_history_id_(-1), referrer(NULL),
-	m_pCookie(nullptr)
+	m_cookie(L""),
+	m_hCookieHttpEvent(nullptr)
 {
 	impersonateIE = 0;
 	dontEscapeRequest = false;
@@ -535,11 +546,15 @@ HttpWindow::HttpWindow(wchar_t *type, wchar_t *srcUrl, unsigned int flags) :
 	bufferSize = 0;
 	reading = 0;
 
+	m_hCookieHttpEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+
 	secondRequest = NULL;
 
 	postData = 0;
 	postPrefixTemplate = 0;
 	requestHeaders = L"Accept-Charset: ISO-8859-1,utf-8;q=0.7,*;q=0.7\r\nContent-Type: application/x-www-form-urlencoded";
+
+	m_cookiePath = L"/";
 
 	replyCodePage = CP_UTF8;
 	postCodePage = CP_UTF8;
@@ -558,6 +573,10 @@ HttpWindow::~HttpWindow()
 	CleanupRequest();
 	numHttpWindows--;
 	WinHttpCloseHandle(hConnect);
+
+	if(m_hCookieHttpEvent)
+		CloseHandle(m_hCookieHttpEvent);
+
 	if (!numHttpWindows)
 		for (int i=0; i<3; i++)
 			if (hHttpSession[i])
@@ -586,49 +605,49 @@ void HttpWindow::GetCookie()
 		MakeInternet(impersonateIE);
 	}
 
+	m_cookie.clear();
+
 	if(HINTERNET hConnect = WinHttpConnect(hHttpSession[impersonateIE], host, port, 0))
 	{
-		if(HINTERNET hRequest = WinHttpOpenRequest(hConnect, L"GET", L"/", 0, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, port == 443 ? WINHTTP_FLAG_SECURE : 0))
+		if(HINTERNET hRequest = WinHttpOpenRequest(hConnect, L"GET", m_cookiePath.c_str(), 0, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, port == 443 ? WINHTTP_FLAG_SECURE : 0))
 		{
-			if(WinHttpSendRequest(hRequest, WINHTTP_NO_ADDITIONAL_HEADERS, 0, WINHTTP_NO_REQUEST_DATA, 0, 0, 0) &&
-			   WinHttpReceiveResponse(hRequest, NULL))
+			ResetEvent(m_hCookieHttpEvent);
+			WinHttpSetStatusCallback(hRequest, HttpCookieCallback, WINHTTP_CALLBACK_FLAG_ALL_NOTIFICATIONS | WINHTTP_CALLBACK_FLAG_DATA_AVAILABLE | WINHTTP_CALLBACK_FLAG_REQUEST_ERROR | WINHTTP_CALLBACK_FLAG_CLOSE_CONNECTION | WINHTTP_CALLBACK_STATUS_HEADERS_AVAILABLE, 0);
+			if(WinHttpSendRequest(hRequest, WINHTTP_NO_ADDITIONAL_HEADERS, 0, WINHTTP_NO_REQUEST_DATA, 0, 0, (DWORD_PTR) this))
 			{
-				DWORD index = 0;
-				DWORD len = 0;
-				if(m_pCookie = (wchar_t*)malloc(len))
+				WaitForSingleObject(m_hCookieHttpEvent, 5000); // Wait 5 sec. for the event to be set
+				if(WinHttpReceiveResponse(hRequest, NULL))
 				{
-					for(;;)
+					ResetEvent(m_hCookieHttpEvent);
+					WaitForSingleObject(m_hCookieHttpEvent, 5000); // Wait 5 sec. for the event to be set
+					DWORD index = 0;
 					{
-						DWORD index2 = index;
-						DWORD len2 = 0;
-						WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_SET_COOKIE, WINHTTP_HEADER_NAME_BY_INDEX, NULL, &len2, &index2);
-						DWORD err = GetLastError();
-
-						if(GetLastError() != ERROR_INSUFFICIENT_BUFFER)
-							break;
-
-						if(wchar_t *buffer2 = (wchar_t*)realloc(m_pCookie, len + (len2 * sizeof(wchar_t))))
-							m_pCookie = buffer2;
-						else
-							break;
-
-						if(!WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_SET_COOKIE, WINHTTP_HEADER_NAME_BY_INDEX, (wchar_t*)((char*)m_pCookie + len), &len2, &index))
-							break;
-
-						if(wchar_t *p = wcschr((wchar_t*)((char*)m_pCookie + len), L';'))
+						for(;;)
 						{
-							p[1] = 0;
-							len = (p - m_pCookie + 2) * sizeof(wchar_t);
+							DWORD err = GetLastError();
+							DWORD index2 = index;
+							DWORD len = 0;
+							WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_SET_COOKIE, WINHTTP_HEADER_NAME_BY_INDEX, NULL, &len, &index2);
+							err = GetLastError();
+
+							if(GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+								break;
+
+							wchar_t *pBuffer = reinterpret_cast<wchar_t*>(calloc(len, sizeof(wchar_t)));
+							if (!pBuffer)
+								break;
+
+							if(!WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_SET_COOKIE, WINHTTP_HEADER_NAME_BY_INDEX, pBuffer, &len, &index))
+								break;
+
+							m_cookie.append(pBuffer);
+							m_cookie.append(L"; ");
 						}
-						else
-							len += len2;
 					}
 				}
+				WinHttpCloseHandle(hRequest);
 			}
-			WinHttpCloseHandle(hRequest);
+			WinHttpCloseHandle(hConnect);
 		}
-		WinHttpCloseHandle(hConnect);
 	}
-	if(!m_pCookie)
-		m_pCookie = nullptr;
 }

@@ -56,9 +56,6 @@ char *BingWindow::GetTranslationPrefix(Language src, Language dst, const char *t
 		return (char*)1;
 
 #if 0
-	if (!m_pCookie)
-		GetCookie();
-
 	int lines = 1;
 	for(const char *p = strchr(text, '\n'); p; p = strchr(p + 1, '\n'))
 		lines++;

@@ -125,7 +125,6 @@ GoogleWindow::GoogleWindow() : HttpWindow(L"Google", L"https://translate.google.
 #endif
 	port = 443;
 	dontEscapeRequest = true;
-	// m_pCookie = nullptr;
 	impersonateIE = 0;
 	// m_pOrgRequestHeaders = requestHeaders;
 	// m_tlCnt = 0;
@@ -133,7 +132,6 @@ GoogleWindow::GoogleWindow() : HttpWindow(L"Google", L"https://translate.google.
 
 GoogleWindow::~GoogleWindow()
 {
-	free(m_pCookie);
 }
 
 wchar_t *GoogleWindow::GetTranslationPath(Language src, Language dst, const wchar_t *text)
@@ -149,18 +147,6 @@ wchar_t *GoogleWindow::GetTranslationPath(Language src, Language dst, const wcha
 	// wchar_t *etext = HttpEscapeParamW(text, wcslen(text));
 	// int len = wcslen(path) + strlen(srcString) + strlen(dstString) + wcslen(etext) + 1 + 16;
 	// wchar_t *out = (wchar_t*)malloc(len*sizeof(wchar_t));
-
-	// if(!m_pCookie || m_tlCnt >= 100)
-	// {
-	// 	free(m_pCookie);
-	// 	m_tlCnt = 0;
-	// 	GetCookie();
-	// 	wchar_t *pBuf = (wchar_t*)malloc((wcslen(m_pOrgRequestHeaders) + 10) * sizeof(wchar_t) + (wcslen(m_pCookie) + 1) * sizeof(wchar_t));
-	// 	swprintf(pBuf, L"%s;Cookie: %s", m_pOrgRequestHeaders, m_pCookie);
-	// 	free(m_pCookie);
-	// 	m_pCookie = pBuf;
-	// 	requestHeaders = m_pCookie;
-	// }
 
 	// m_tlCnt++;
 

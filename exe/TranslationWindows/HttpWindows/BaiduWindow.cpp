@@ -1,5 +1,6 @@
 #include <Shared/Shrink.h>
 #include "BaiduWindow.h"
+#include <cstdint>
 
 
 int64_t n(int64_t r, std::string o)
@@ -90,12 +91,10 @@ BaiduWindow::BaiduWindow() : HttpWindow(L"Baidu", L"https://fanyi.baidu.com/")
 	requestHeaders = L"Content-Type: application/x-www-form-urlencoded; charset=UTF-8;";
 	dontEscapeRequest = true;
 	memset(m_token, 0, 33);
-	m_pCookie = nullptr;
 }
 
 BaiduWindow::~BaiduWindow()
 {
-	free(m_pCookie);
 }
 
 wchar_t *BaiduWindow::FindTranslatedText(wchar_t* html)
@@ -205,14 +204,12 @@ char *BaiduWindow::GetTranslationPrefix(Language src, Language dst, const char *
 	if(!text)
 		return (char*)1;
 
-	if(!m_pCookie)
+	if(m_cookie.empty())
 	{
 		GetCookie();
-		wchar_t *pBuf = (wchar_t*)malloc((wcslen(requestHeaders) + 1) * sizeof(wchar_t) + (wcslen(m_pCookie) + 1) * sizeof(wchar_t));
-		swprintf(pBuf, L"%s%s", requestHeaders, m_pCookie);
-		free(m_pCookie);
-		m_pCookie = pBuf;
-		requestHeaders = m_pCookie;
+		wchar_t *pBuf = (wchar_t*)malloc((wcslen(requestHeaders) + 1) * sizeof(wchar_t) + (m_cookie.length() + 1) * sizeof(wchar_t));
+		swprintf(pBuf, L"%s%s", requestHeaders, m_cookie.c_str());
+		requestHeaders = pBuf;
 	}
 	if(m_token[0] == 0)
 		GetToken();
