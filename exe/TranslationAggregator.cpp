@@ -1815,7 +1815,11 @@ void SaveConfig()
 		windows[i]->SaveWindowTypeConfig();
 }
 
+#ifdef UNICODE
+int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine, int nCmdShow)
+#else
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+#endif
 {
 	WSADATA wsaData;
 	int winsockHappy = !WSAStartup(0x202, &wsaData);
