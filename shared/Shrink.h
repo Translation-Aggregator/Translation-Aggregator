@@ -6,10 +6,11 @@
 #define UNICODE
 #endif
 
+#define WIN32_LEAN_AND_MEAN
 #define _WIN32_WINNT 0x0501
 #define INITGUID
-#include <WinSock2.h>
 #include <Windows.h>
+#include <WinSock2.h>
 #include <stdio.h>
 #ifndef NO_STD
 #include <string>
@@ -18,6 +19,10 @@
 #include <vector>
 #include <map>
 #endif
+
+#include <commdlg.h>
+#include <mmsystem.h>
+#include <shellapi.h>
 
 // Needed for typedefs used by http windows.
 #include <Winhttp.h>
