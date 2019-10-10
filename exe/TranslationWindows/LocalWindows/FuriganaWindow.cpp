@@ -4,6 +4,9 @@
 #include "../../Dialogs/MyToolTip.h"
 
 #include "../../util/DictionaryUtil.h"
+#ifdef SETSUMI_CHANGES
+#include "exe/resource.h"
+#endif
 
 #define WORD_PADDING 4
 #define HEIGHT_PADDING 2
@@ -395,7 +398,16 @@ void FuriganaWindow::Draw()
 					SetBkColor(hDC, bkColor);
 			}
 
+#ifdef SETSUMI_CHANGES
+			if (enabled) {
+				//hack - background color 2
+				SetBkColor(hDC, defaultBKColor);
+				//SetBkColor(hDC, GetSysColor(COLOR_WINDOW));
+				//hackend
+			}
+#else
 			if (enabled) SetBkColor(hDC, GetSysColor(COLOR_WINDOW));
+#endif
 			else SetBkColor(hDC, GetSysColor(COLOR_3DFACE));
 
 
@@ -419,6 +431,28 @@ void FuriganaWindow::Draw()
 					r.left = word->hOffset+2;
 					if (word->width > word->furiganaWidth)
 						r.left += (word->width-word->furiganaWidth+1)/2;
+#ifdef SETSUMI_CHANGES
+					//hack - furigana color
+					{
+						COLORREF col = RGB(100,100,255); // words with translation
+						wchar_t *wd = word->word;
+						if (word->srcWord) {
+							wd = word->srcWord;
+						}
+						if (wd && DictsLoaded()) {
+							Match *matches;
+							int numMatches;
+							FindExactMatches(wd, wcslen(wd), matches, numMatches);
+							if (!numMatches) {
+								col = RGB(140,140,140); // words without translation
+							} else {
+								free(matches);
+							}
+						}
+						SetTextColor(hDC, col);
+					}
+					//hackend
+#endif
 					DrawText(hDC, furigana, -1, &r, DT_NOCLIP);
 				}
 			}
@@ -438,7 +472,14 @@ void FuriganaWindow::CheckToolTip(int x, int y)
 			x > toolTipRect.right ||
 			y < toolTipRect.top ||
 			y > toolTipRect.bottom)
+#ifdef SETSUMI_CHANGES
+				//hack - keep tooltip if needed
+				if (!hIsKeepToolTip()) HideToolTip();
+				//HideToolTip();
+				//hackend
+#else
 				HideToolTip();
+#endif
 }
 
 void FuriganaWindow::HideToolTip()
@@ -459,6 +500,11 @@ LRESULT CALLBACK FuriganaTextWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 		{
 			// Not sure if this is necessary, but have had things mess up without it.
 			case WM_MOUSELEAVE:
+#ifdef SETSUMI_CHANGES
+				//hack - fix tooltip flickering
+				if (!hIsMouseInsideToolTip() && !hIsKeepToolTip())
+				//hackend
+#endif
 				window->HideToolTip();
 				window->tracking = 0;
 				break;
@@ -598,7 +644,14 @@ LRESULT CALLBACK FuriganaTextWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPA
 				RECT r;
 				GetClientRect(window->hWndEdit, &r);
 				if (IsWindowEnabled(hWnd))
+#ifdef SETSUMI_CHANGES
+						//hack - background color 1
+						SetDCBrushColor(hDC, window->defaultBKColor);
+						FillRect(hDC, &r, (HBRUSH)GetStockObject(DC_BRUSH));
+						//hackend
+#else
 					FillRect(hDC, &r, GetSysColorBrush(COLOR_WINDOW));
+#endif
 				else
 					FillRect(hDC, &r, GetSysColorBrush(COLOR_3DFACE));
 				return 0;
@@ -701,7 +754,11 @@ int FuriganaWindow::MakeWindow(int showToolbar, HWND hWndParent)
 			0, 0,
 			ghInst,
 			0,
+#ifdef SETSUMI_CHANGES
+			LoadCursor(ghInst, MAKEINTRESOURCE(IDC_POINTER)/*IDC_ARROW*/), //hack - set parser's cursor to not stand out
+#else
 			LoadCursor(NULL, IDC_ARROW),
+#endif
 			(HBRUSH)(COLOR_WINDOW+1),
 			0,
 			L"FURIGANA SUBWINDOW"
@@ -712,7 +769,12 @@ int FuriganaWindow::MakeWindow(int showToolbar, HWND hWndParent)
 	if (!hWnd)
 	{
 		TranslationWindow::MakeWindow(showToolbar, hWndParent);
+#ifdef SETSUMI_CHANGES
+		//hack - reduce border 1
+		hWndEdit = CreateWindowEx(0/*WS_EX_STATICEDGE*/, L"FURIGANA SUBWINDOW", L"",
+#else
 		hWndEdit = CreateWindowEx(WS_EX_STATICEDGE, L"FURIGANA SUBWINDOW", L"",
+#endif
 			CCS_NODIVIDER  | ES_MULTILINE | WS_VISIBLE | WS_CHILD | WS_TABSTOP,
 			CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 			hWnd, 0, ghInst, this);

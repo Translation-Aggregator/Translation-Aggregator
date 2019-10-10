@@ -7,6 +7,9 @@
 #define ID_DELETE                       5
 #define ID_CLEAR                        6
 #define IDR_MAIN_MENU                   102
+#ifdef SETSUMI_CHANGES
+#define IDC_POINTER                     104
+#endif
 #define IDR_ACCELERATORS                105
 #define IDI_ICON1                       106
 #define IDR_TOOLBAR_TRANSLATION         107
@@ -215,6 +218,10 @@
 #define ID_CONTEXT_CLEAR                40085
 #define ID_PROCESS_CLEAR                40086
 #define ID_VIEW_TOOLTIP_FONT            40087
+#ifdef SETSUMI_CHANGES
+#define ID_BORDERLESS_WINDOW            40088
+#define ID_VIEW_RESETPLACEMENT          40091
+#endif
 #define ID_HISTORY_BACK                 40088
 #define ID_HISTORY_FORWARD              40089
 #define ID_TOOLS_PREVIOUSHISTORYENTRY   40091

@@ -33,6 +33,11 @@
 // Given a slight bonus over other words.
 #define JAP_WORD_PART        0x0010
 #define JAP_WORD_COUNTER     0x0020
+#ifdef SETSUMI_CHANGES
+//hack - custom word top priority flag
+#define JAP_WORD_TOP			0x0040 // (T) custom tag
+//hackend
+#endif
 
 // Set for final Japanese string, just before english.
 #define JAP_WORD_FINAL       0x8000

@@ -75,14 +75,25 @@ BEGIN
     POPUP "&View"
     BEGIN
         MENUITEM "&Font\tAlt-F",                ID_VIEW_FONT
+#ifdef SETSUMI_CHANGES
+        MENUITEM "Tooltip Font\tAlt-T",         ID_VIEW_TOOLTIP_FONT
+#else
         MENUITEM "&Tooltip Font\tAlt-T",        ID_VIEW_TOOLTIP_FONT
+#endif
         MENUITEM SEPARATOR
         MENUITEM "Hide &Toolbar\tCtrl-T",       ID_VIEW_HIDETOOLBAR
         MENUITEM "&Hide  Frame\tCtrl-F",        ID_VIEW_HIDEWINDOWFRAME
+#ifdef SETSUMI_CHANGES
+        MENUITEM "&Borderless\tCtrl-B",         ID_BORDERLESS_WINDOW
+#endif
         MENUITEM "&Always on Top\tAlt-A",       ID_TOPMOST
         MENUITEM SEPARATOR
         MENUITEM "&More Transparent\tCtrl-Num-", ID_VIEW_LESSSOLID
         MENUITEM "&Less Transparent\tCtrl-Num+", ID_VIEW_MORESOLID
+#ifdef SETSUMI_CHANGES
+        MENUITEM SEPARATOR
+        MENUITEM "&Reset Placement\tCtrl-P",    ID_VIEW_RESETPLACEMENT
+#endif
     END
     POPUP "&Window"
     BEGIN
@@ -112,6 +123,9 @@ BEGIN
     "7",            ID_BIND_LAYOUT_7,       VIRTKEY, SHIFT, ALT, NOINVERT
     "8",            ID_BIND_LAYOUT_8,       VIRTKEY, SHIFT, ALT, NOINVERT
     "9",            ID_BIND_LAYOUT_9,       VIRTKEY, SHIFT, ALT, NOINVERT
+#ifdef SETSUMI_CHANGES
+    "B",            ID_BORDERLESS_WINDOW,   VIRTKEY, CONTROL, NOINVERT
+#endif
     "L",            ID_FILE_INJECTINTOPROCESS, VIRTKEY, CONTROL, NOINVERT
     "X",            ID_FILE_QUIT,           VIRTKEY, ALT, NOINVERT
     "0",            ID_LAYOUT_0,            VIRTKEY, ALT, NOINVERT
@@ -138,6 +152,9 @@ BEGIN
     "0",            ID_VIEW_SHOWALL,        VIRTKEY, CONTROL, NOINVERT
     "T",            ID_VIEW_TOOLTIP_FONT,   VIRTKEY, ALT, NOINVERT
     "2",            ID_VIEW_TWOCOLUMN,      VIRTKEY, CONTROL, NOINVERT
+#ifdef SETSUMI_CHANEGS
+    "P",            ID_VIEW_RESETPLACEMENT, VIRTKEY, CONTROL, NOINVERT
+#endif
     VK_UP,          ID_HISTORY_BACK,        VIRTKEY, ALT, NOINVERT
     VK_DOWN,        ID_HISTORY_FORWARD,     VIRTKEY, ALT, NOINVERT
     VK_PRIOR,       ID_HISTORY_BACK,        VIRTKEY, ALT, NOINVERT
@@ -588,6 +605,15 @@ BEGIN
     END
 END
 #endif    // APSTUDIO_INVOKED
+
+#ifdef SETSUMI_CHANEGS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Cursor
+//
+
+IDC_POINTER             CURSOR                  "arrow.cur"
+#endif
 
 #endif    // English (United States) resources
 /////////////////////////////////////////////////////////////////////////////

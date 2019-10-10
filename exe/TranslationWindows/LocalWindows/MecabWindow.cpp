@@ -193,6 +193,15 @@ INT_PTR CALLBACK MecabDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARAM 
 	wchar_t str[30];
 	switch (uMsg)
 	{
+#ifdef SETSUMI_CHANGES
+		case WM_SHOWWINDOW: //hack - fix keyboard input on freshly shown dialogs
+			if (wParam) {
+				HWND hwndOk = GetDlgItem(hWndDlg, IDOK);
+				SetActiveWindow(hWndDlg);
+				SetFocus(hwndOk);
+			}
+			break;
+#endif
 		case WM_INITDIALOG:
 			{
 				for (int i=0; i<3; i++)

@@ -11,6 +11,9 @@
 #include "util/Dictionary.h"
 #include "TranslationWindows/TranslationWindow.h"
 #include "TranslationWindows/TranslationWindowFactory.h"
+#ifdef SETSUMI_CHANGES
+#include "TranslationWindows/LocalWindows/FuriganaWindow.h"
+#endif
 
 #include "config.h"
 #include "util/Injector.h"
@@ -471,6 +474,9 @@ struct MasterWindow
 	unsigned char numCols;
 	unsigned char topmost;
 	unsigned char showWindowFrame;
+#ifdef SETSUMI_CHANGES
+	unsigned char borderlessWindow;
+#endif
 	unsigned char showToolbars;
 	unsigned char alpha;
 	TranslationWindow *children[20];
@@ -537,10 +543,23 @@ struct MasterWindow
 	{
 		DWORD styleEx = WS_EX_COMPOSITED;
 		DWORD style = WS_CLIPSIBLINGS;
+#ifdef SETSUMI_CHANGES
+		//hack - borderless window
+		if (borderlessWindow) {
+			showWindowFrame = 0;
+			style |= WS_POPUP;
+		} else {
+			if (showWindowFrame)
+				style |= WS_OVERLAPPEDWINDOW;
+			else
+				style |= WS_POPUP | WS_THICKFRAME;
+		}
+#else
 		if (showWindowFrame)
 			style |= WS_OVERLAPPEDWINDOW;
 		else
 			style |= WS_POPUP | WS_THICKFRAME;
+#endif
 		HWND hWndOld = hWnd;
 		RECT r;
 		if (hWnd)
@@ -619,9 +638,16 @@ struct MasterWindow
 		}
 	}
 
+#ifdef SETSUMI_CHANGES
+	void SetWindowFrame(int val, int bord = 0)
+#else
 	void SetWindowFrame(int val)
+#endif
 	{
 		showWindowFrame = val;
+#ifdef SETSUMI_CHANGES
+		borderlessWindow = bord;
+#endif
 		MakeWindow();
 		SetChecks();
 	}
@@ -786,7 +812,11 @@ struct MasterWindow
 	}
 
 
+#ifdef SETSUMI_CHANGES
+	static MasterWindow *CreateMasterWindow(TranslationWindow *w, int numCols=2, int colPlacement=RANGE_MAX/2, int topmost = 0, int frame = 1, int toolbars = 1, int alpha = 255, int lockWindows = 0, int borderless = 0)
+#else
 	static MasterWindow *CreateMasterWindow(TranslationWindow *w, int numCols=2, int colPlacement=RANGE_MAX/2, int topmost = 0, int frame = 1, int toolbars = 1, int alpha = 255, int lockWindows = 0)
+#endif
 	{
 		if (colPlacement < 0 || colPlacement > RANGE_MAX) colPlacement = RANGE_MAX/2;
 		MasterWindow *master = (MasterWindow*) calloc(1, sizeof(MasterWindow));
@@ -797,6 +827,9 @@ struct MasterWindow
 		master->colPlacement = colPlacement;
 		master->topmost = topmost;
 		master->showWindowFrame = frame;
+#ifdef SETSUMI_CHANGES
+		master->borderlessWindow = borderless;
+#endif
 		master->showToolbars = toolbars;
 
 		master->MakeWindow();
@@ -1003,16 +1036,34 @@ struct MasterWindow
 				wchar_t *end = temp;
 				*end = 0;
 				MasterWindow *win = masterWindows[i];
+#ifdef SETSUMI_CHANGES
+				FuriganaWindow *pjparser = NULL, *pmecab = NULL; //hack - save JParser and Mecab background color into layout
+#endif
 				for (int j=0; j<win->numChildren; j++)
 				{
 					if (j)
 						wcscat(end, L",");
 					wcscat(end, win->children[j]->windowType);
 					end = wcschr(end, 0);
+
+#ifdef SETSUMI_CHANGES
+					if (!wcsnicmp(L"JParser", win->children[j]->windowType, wcslen(win->children[j]->windowType)))
+						pjparser = (FuriganaWindow*)win->children[j];
+					else if (!wcsnicmp(L"Mecab", win->children[j]->windowType, wcslen(win->children[j]->windowType)))
+						pmecab = (FuriganaWindow*)win->children[j];
+#endif
 				}
 				RECT r;
 				GetWindowRect(win->hWnd, &r);
+#ifdef SETSUMI_CHANGES
+				wsprintf(end, L"; %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i; ", win->numCols, win->topmost, win->showWindowFrame, win->showToolbars, win->alpha, win->colPlacement, r.left, r.top, r.right-r.left, r.bottom-r.top, win->lockWindows, win->borderlessWindow,
+					pjparser?pjparser->colors[0]:0, pjparser?pjparser->colors[1]:0,
+					pjparser?pjparser->colors[2]:0, pjparser?pjparser->colors[3]:0,
+					pmecab?pmecab->colors[0]:0, pmecab?pmecab->colors[1]:0,
+					pmecab?pmecab->colors[2]:0, pmecab?pmecab->colors[3]:0);
+#else
 				wsprintf(end, L"; %i, %i, %i, %i, %i, %i, %i, %i, %i, %i, %i; ", win->numCols, win->topmost, win->showWindowFrame, win->showToolbars, win->alpha, win->colPlacement, r.left, r.top, r.right-r.left, r.bottom-r.top, win->lockWindows);
+#endif
 				for (int j=0; j<win->numRows; j++)
 				{
 					if (j)
@@ -1048,7 +1099,7 @@ struct MasterWindow
 			if (!GetPrivateProfileStringW(prefix, temp2, L"", temp, sizeof(temp)/sizeof(temp[0]), config.ini))
 				continue;
 			wchar_t *windowString = mywcstok(temp, L";");
-			if (!windows) continue;
+			if (!windowString) continue;
 			wchar_t *valString = mywcstok(0, L";");
 			if (!valString) continue;
 			wchar_t *placement = mywcstok(0, L";");
@@ -1073,6 +1124,20 @@ struct MasterWindow
 					if (!wcsicmp(windows[j]->windowType, name))
 					{
 						win = windows[j];
+#ifdef SETSUMI_CHANGES
+						//hack - load JParser and Mecab background color from layout
+						if (!wcsnicmp(L"JParser", name, wcslen(name))) {
+							((FuriganaWindow*)win)->colors[0] = vals[12];
+							((FuriganaWindow*)win)->colors[1] = vals[13];
+							((FuriganaWindow*)win)->colors[2] = vals[14];
+							((FuriganaWindow*)win)->colors[3] = vals[15];
+						} else if (!wcsnicmp(L"Mecab", name, wcslen(name))) {
+							((FuriganaWindow*)win)->colors[0] = vals[16];
+							((FuriganaWindow*)win)->colors[1] = vals[17];
+							((FuriganaWindow*)win)->colors[2] = vals[18];
+							((FuriganaWindow*)win)->colors[3] = vals[19];
+						}
+#endif
 						if (!j)
 							OriginalTextPresent = true;
 						break;
@@ -1081,7 +1146,11 @@ struct MasterWindow
 				if (win)
 				{
 					if (!master)
+#ifdef SETSUMI_CHANGES
+						master = MasterWindow::CreateMasterWindow(win, vals[0], vals[5], vals[1], vals[2], vals[3], vals[4], vals[10], vals[11]);
+#else
 						master = MasterWindow::CreateMasterWindow(win, vals[0], vals[5], vals[1], vals[2], vals[3], vals[4], vals[10]);
+#endif
 					else
 						master->AddChild(win);
 				}
@@ -1092,6 +1161,10 @@ struct MasterWindow
 
 			// Not real rects - use height and width instead of bottom/right.
 			RECT rects[2] = {{vals[6], vals[7], vals[8], vals[9]}, {0,0,0,0}};
+#ifdef SETSUMI_CHANGES
+			//hack - no reposition if beyond screen
+			rects[1] = rects[0];
+#else
 			if (rects[0].right < 50) rects[0].right = 50;
 			if (rects[0].bottom < 50) rects[0].bottom = 50;
 			EnumDisplayMonitors(0, 0, PlaceWindowFromMonitorEnum, (LPARAM) &rects);
@@ -1105,6 +1178,7 @@ struct MasterWindow
 					rects[1].bottom = rects[1].right = 400;
 				}
 			}
+#endif
 			MoveWindow(master->hWnd, rects[1].left, rects[1].top, rects[1].right, rects[1].bottom, 0);
 
 			int index = 0;
@@ -1374,6 +1448,23 @@ LRESULT CALLBACK TwigMainWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 	{
 		switch(uMsg)
 		{
+#ifdef SETSUMI_CHANGES
+			//hack - splitter color (main window background)
+			case WM_PAINT:
+				{
+					PAINTSTRUCT ps;
+					HDC hdc = BeginPaint(hWnd, &ps);
+
+					HBRUSH brush = CreateSolidBrush(RGB(150,150,150));
+					HBRUSH oldbrush = (HBRUSH)SelectObject(hdc, brush);
+					FillRect(hdc, &ps.rcPaint, brush);
+					SelectObject(hdc, oldbrush);
+					DeleteObject(brush);
+
+					EndPaint(hWnd, &ps);
+				}
+				break;
+#endif
 			case WM_CLOSE:
 				MasterWindow::SaveLayout(0);
 				while (win->RemoveChild(win->children[0]));
@@ -1549,6 +1640,16 @@ LRESULT CALLBACK TwigMainWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM 
 						// but it works.
 						return 0;
 					}
+#ifdef SETSUMI_CHANGES
+					else if (cmd == ID_BORDERLESS_WINDOW) { //hack - borderless window menu click
+						win->SetWindowFrame(win->showWindowFrame, !win->borderlessWindow);
+						return 0;
+					}
+					else if (cmd == ID_VIEW_RESETPLACEMENT) { //hack - reset TA window position
+						SetWindowPos(hWnd, HWND_TOPMOST, 100, 100, 0, 0, SWP_NOSIZE);
+						return 0;
+					}
+#endif
 					else if (cmd == ID_VIEW_TWOCOLUMN)
 					{
 						win->SetNumCols(win->numCols%2 + 1);
@@ -1821,6 +1922,9 @@ int WINAPI wWinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PWSTR pCmdLine
 int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 #endif
 {
+#ifdef SETSUMI_CHANGES
+	SetErrorMode(SetErrorMode(0) | SEM_NOGPFAULTERRORBOX);
+#endif
 	WSADATA wsaData;
 	int winsockHappy = !WSAStartup(0x202, &wsaData);
 	ghInst = hInstance;

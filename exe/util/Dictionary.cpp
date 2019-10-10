@@ -300,7 +300,14 @@ int CreateDict(wchar_t *inPath, FileSig &srcSig, wchar_t *path)
 #else
 					flags |= JAP_WORD_COMMON_LINE;
 #endif
-
+#ifdef SETSUMI_CHANGES
+				//hack - set custom word top priority flag (1)
+				if (wcsstr(line, L"(T)")) {
+					flags |= JAP_WORD_TOP;
+					primaryFlags |= JAP_WORD_TOP;
+				}
+				//hackend
+#endif
 				/*
 				if (numEntries == maxEntries)
 				{
@@ -375,6 +382,12 @@ int CreateDict(wchar_t *inPath, FileSig &srcSig, wchar_t *path)
 							{
 								if (wcsstr(p, L"(P)"))
 									jStringData->flags |= JAP_WORD_COMMON;
+#ifdef SETSUMI_CHANGES
+								//hack - set custom word top priority flag (2)
+								if (wcsstr(japString+w, L"(T)"))
+									jStringData->flags |= JAP_WORD_TOP;
+								//hackend
+#endif
 								*p = 0;
 							}
 
@@ -992,7 +1005,13 @@ int __cdecl CompareMatches(const void *v1, const void *v2)
 	int name = (m1->matchFlags & MATCH_IS_NAME) - (m2->matchFlags & MATCH_IS_NAME);
 	if (name) return name;
 
+#ifdef SETSUMI_CHANGES
+	//hack - ???
+	int mask = JAP_WORD_TOP | JAP_WORD_COUNTER | JAP_WORD_PART | JAP_WORD_COMMON | JAP_WORD_COMMON_LINE | JAP_WORD_PRIMARY;
+	//hackend
+#else
 	int mask = JAP_WORD_COUNTER | JAP_WORD_PART | JAP_WORD_COMMON | JAP_WORD_COMMON_LINE | JAP_WORD_PRIMARY;
+#endif
 	int flagDiff = (m2->japFlags & mask) - (m1->japFlags & mask);
 	if (flagDiff) return flagDiff;
 	// May do something better later.
@@ -1214,6 +1233,15 @@ void FindBestMatches(const wchar_t *string, int len, Match *&matches, int &numMa
 				else
 					score += 5;
 			}
+
+#ifdef SETSUMI_CHANGES
+			//hack - set custom word top priority score
+			if (match->japFlags & JAP_WORD_TOP) {
+				//Beep(500,50);
+				score = -999999;
+			}
+			//hackend
+#endif
 
 			/*
 			// Bonus for exactly matching a primary entry - basically discourage

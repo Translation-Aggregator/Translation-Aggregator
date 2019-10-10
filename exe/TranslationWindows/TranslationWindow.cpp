@@ -205,14 +205,24 @@ int TranslationWindow::MakeWindow(int showToolbar, HWND hWndParent)
 	if (!hWnd)
 	{
 		this->hWndParent = hWndParent;
+#ifdef SETSUMI_CHANGES
+		//hack - reduce border 2
+		hWnd = CreateWindowEx(0/*WS_EX_STATICEDGE*/, TRANSLATION_WINDOW_CLASS, L"",
+#else
 		hWnd = CreateWindowEx(WS_EX_STATICEDGE, TRANSLATION_WINDOW_CLASS, L"",
+#endif
 			WS_VISIBLE | WS_CHILD | WS_TABSTOP,
 			CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 			hWndParent, 0, ghInst, this);
 
 		if (!(flags & TWF_NO_EDIT))
 		{
+#ifdef SETSUMI_CHANGES
+			//hack - reduce border 3
+			hWndEdit = CreateWindowEx(0/*WS_EX_STATICEDGE*/, MSFTEDIT_CLASS, L"",
+#else
 			hWndEdit = CreateWindowEx(WS_EX_STATICEDGE, MSFTEDIT_CLASS, L"",
+#endif
 				CCS_NODIVIDER  | WS_VSCROLL | ES_AUTOVSCROLL | ES_MULTILINE | WS_VISIBLE | WS_CHILD | WS_TABSTOP,
 				CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT, CW_USEDEFAULT,
 				hWnd, 0, ghInst, 0);

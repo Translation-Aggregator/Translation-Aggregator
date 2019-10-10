@@ -96,7 +96,11 @@ int GetLocaleName(const LCID& lcid, wchar_t *name, int maxNameLen)
 {
 	if (lcid)
 	{
+#ifdef SETSUMI_CHANGES
+		int len = GetLocaleInfoW(lcid, 0x00001001/*LOCALE_SENGLISHLANGUAGENAME*/, name, maxNameLen); //hack - replace LOCALE_SENGLISHLANGUAGENAME with value 
+#else
 		int len = GetLocaleInfoW(lcid, LOCALE_SLOCALIZEDDISPLAYNAME, name, maxNameLen);
+#endif
 		if (len > 0) return len;
 		len = GetLocaleInfoW(lcid, LOCALE_SLANGUAGE, name, maxNameLen);
 		if (len > 0) return len;
@@ -1039,6 +1043,15 @@ INT_PTR CALLBACK InjectDialog(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 			KillTimer(hWnd, 1);
 			EndDialog(hWnd, 1);
 			break;
+#ifdef SETSUMI_CHANGES
+		case WM_SHOWWINDOW: //hack - fix keyboard input on freshly shown dialogs
+			if (wParam) {
+				HWND hwndOk = GetDlgItem(hWnd, IDOK);
+				SetActiveWindow(hWnd);
+				SetFocus(hwndOk);
+			}
+			break;
+#endif
 		default:
 			break;
 	}
