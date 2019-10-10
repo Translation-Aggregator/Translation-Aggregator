@@ -310,8 +310,7 @@ void FuriganaWindow::Draw()
 	GetClientRect(hWndEdit, &client);
 	HDC hDC = BeginPaint(hWndEdit, &ps);
 	// Wine bugfix: clear the screen
-	HBRUSH hBrush = CreateSolidBrush(RGB(255,255,255));
-	FillRect(hDC, &client, hBrush);  
+	FillRect(hDC, &client, GetSysColorBrush(COLOR_WINDOW));  
 	if (hDC && hFontBig)
 	{
 		HGDIOBJ hOldFont = SelectObject(hDC, hFontBig);
