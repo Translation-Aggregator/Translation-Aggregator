@@ -4,7 +4,7 @@
 
 Translation Aggregator is a program that machine translates texts through multiple sources and presents them in one conveient window.
 
-The discussion thread for this program is available [here](http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/68499-translation-aggregator/).
+The **archived** discussion thread for this program is available [here](https://web.archive.org/web/20190905051811/http://www.hongfire.com:80/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/68499-translation-aggregator).
 
 ## About
 
@@ -41,9 +41,9 @@ Might sound like minor contributions, but feedback really drives the development
 And the creators and maintainers of **edict**, **MeCab**, and **zlib**.  
 
 You might also be interested in:
-* **Setsumi**'s [TA Helper](https://github.com/setsumi/TAHelper) and [AGTHGrab](http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/68499-translation-aggregator/page13?postcount=195#post2139294).
-* **errotzol**'s [replacements script](http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/68499-translation-aggregator?p=2766594#post2766594).
-* **Devocalypse**'s [devOSD](http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/114249-devosd-a-japanese-galge-eroge-visual-novel-translation-helper?t=139063).
-* **kaosu**'s [ITH](http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/185725-interactive-text-hooker-new-text-extraction-tool?t=208860) (Like AGTH. No direct TA support, due to lack of a command line interface, but definitely worth checking out).
+* **Setsumi**'s [TA Helper](https://github.com/setsumi/TAHelper) and [AGTHGrab](https://web.archive.org/web/20170509141602/http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/68499-translation-aggregator/page13?postcount=195).
+* **errotzol**'s [replacements script](https://web.archive.org/web/20190910085707/http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/68499-translation-aggregator/page34#post2766594).
+* **Devocalypse**'s [devOSD](https://web.archive.org/web/20190918173557/http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/114249-devosd-a-japanese-galge-eroge-visual-novel-translation-helper?t=139063).
+* **kaosu**'s [ITH](https://web.archive.org/web/20190921092912/http://www.hongfire.com/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/185725-interactive-text-hooker-new-text-extraction-tool?t=208860) (Like AGTH. No direct TA support, due to lack of a command line interface, but definitely worth checking out).
 * [MeCab](http://taku910.github.io/mecab/)
 * [edict2](http://www.edrdg.org/wiki/index.php/JMdict-EDICT_Dictionary_Project)
