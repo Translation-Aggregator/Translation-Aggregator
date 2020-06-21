@@ -2,6 +2,8 @@
 //
 #include "resource.h"
 
+#define MACRO_TO_STRING(x) #x
+
 #define APSTUDIO_READONLY_SYMBOLS
 /////////////////////////////////////////////////////////////////////////////
 //
@@ -255,8 +257,8 @@ END
 //
 
 VS_VERSION_INFO VERSIONINFO
- FILEVERSION 0,4,3,3
- PRODUCTVERSION 0,4,3,3
+ FILEVERSION 1,0,0,0
+ PRODUCTVERSION 1,0,0,0
  FILEFLAGSMASK 0x17L
 #ifdef _DEBUG
  FILEFLAGS 0x1L
@@ -271,11 +273,13 @@ BEGIN
     BEGIN
         BLOCK "041104b0"
         BEGIN
-            VALUE "FileDescription", "Translation Aggregator by ScumSuckingPig, mod by furniture"
-            VALUE "FileVersion", "0, 4, 3, 3"
-            VALUE "OriginalFilename", "Translation Aggregator.exe"
+            VALUE "Comments", "Source code for the latest version of this product is located on the World Wide Web at https://github.com/uyjulian/Translation-Aggregator"
+            VALUE "FileDescription", "Translation Aggregator"
+            VALUE "FileVersion", MACRO_TO_STRING(GIT_TAG)
+            VALUE "LegalCopyright", "Originally created by ScumSuckingPig; modified by furniture, Setsumi, Sinflower, uyjulian; This product is licensed under the GNU General Public License Version 2."
+            VALUE "OriginalFilename", "TranslationAggregator.exe"
             VALUE "ProductName", "Translation Aggregator"
-            VALUE "ProductVersion", "0, 4, 3, 3"
+            VALUE "ProductVersion", MACRO_TO_STRING(GIT_TAG)
         END
     END
     BLOCK "VarFileInfo"

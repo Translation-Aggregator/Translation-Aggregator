@@ -5,6 +5,7 @@ AR = i686-w64-mingw32-ar
 WINDRES = i686-w64-mingw32-windres
 #CFLAGS += -O0 -g
 GIT_TAG := $(shell git describe --abbrev=0 --tags)
+RCFLAGS += -DGIT_TAG=L\"$(GIT_TAG)\"
 CFLAGS += -O3
 CFLAGS += -std=c++17 -Wall -Wno-unused-value -Wno-format -I.. -DGIT_TAG=L\"$(GIT_TAG)\" -DNDEBUG -DNO_GZCOMPRESS -DWIN32 -D_WINDOWS -DHAVE_CONFIG_H -DPCRE_STATIC -DMINGW_HAS_SECURE_API -DUNICODE -D_UNICODE
 LDFLAGS += -s -static -static-libstdc++ -static-libgcc -municode -Wl,--subsystem,windows
