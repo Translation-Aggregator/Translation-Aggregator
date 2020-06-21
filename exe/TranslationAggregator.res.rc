@@ -249,6 +249,41 @@ BEGIN
 END
 #endif    // APSTUDIO_INVOKED
 
+/////////////////////////////////////////////////////////////////////////////
+//
+// Version
+//
+
+VS_VERSION_INFO VERSIONINFO
+ FILEVERSION 0,4,3,3
+ PRODUCTVERSION 0,4,3,3
+ FILEFLAGSMASK 0x17L
+#ifdef _DEBUG
+ FILEFLAGS 0x1L
+#else
+ FILEFLAGS 0x0L
+#endif
+ FILEOS 0x4L
+ FILETYPE 0x1L
+ FILESUBTYPE 0x0L
+BEGIN
+    BLOCK "StringFileInfo"
+    BEGIN
+        BLOCK "041104b0"
+        BEGIN
+            VALUE "FileDescription", "Translation Aggregator by ScumSuckingPig, mod by furniture"
+            VALUE "FileVersion", "0, 4, 3, 3"
+            VALUE "OriginalFilename", "Translation Aggregator.exe"
+            VALUE "ProductName", "Translation Aggregator"
+            VALUE "ProductVersion", "0, 4, 3, 3"
+        END
+    END
+    BLOCK "VarFileInfo"
+    BEGIN
+        VALUE "Translation", 0x411, 1200
+    END
+END
+
 #endif    // Japanese (Japan) resources
 /////////////////////////////////////////////////////////////////////////////
 
