@@ -4,3 +4,6 @@
 [submodule "3rdParty/json"]
 	path = 3rdParty/json
 	url = https://github.com/nlohmann/json.git
+[submodule "3rdParty/meson_toolchains"]
+	path = 3rdParty/meson_toolchains
+	url = https://github.com/uyjulian/meson_toolchains.git
