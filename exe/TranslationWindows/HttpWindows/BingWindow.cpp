@@ -5,31 +5,30 @@ BingWindow::BingWindow() : HttpWindow(L"Bing", L"https://www.bing.com/ttranslate
 {
 	host = L"www.bing.com";
 	path = L"/ttranslatev3";
-	postPrefixTemplate = "&text=%s&fromLang=%s&to=%s";
+	postPrefixTemplate = "&text=%s&fromLang=%s&to=%s&token=%s&key=%s&isAuthv2=true";
 	port = 80;
 	requestHeaders = L"Content-Type: application/x-www-form-urlencoded";
 	dontEscapeRequest = true;
 }
 BingWindow::~BingWindow()
-{
-}
+{}
 
-wchar_t *BingWindow::FindTranslatedText(wchar_t* html)
+wchar_t* BingWindow::FindTranslatedText(wchar_t* html)
 {
 	if (!ParseJSON(html, L"\"text\":\"", L"\"text\":\""))
 		return NULL;
 	return html;
 }
 
-char *EscapeParam(const char *src, int len)
+char* EscapeParam(const char* src, int len)
 {
-	char *out = (char*)malloc(sizeof(char)*(3 * strlen(src) + 1));
-	char *dst = out;
-	while(len)
+	char* out = (char*)malloc(sizeof(char) * (3 * strlen(src) + 1));
+	char* dst = out;
+	while (len)
 	{
 		len--;
 		char c = *src;
-		if(c <= 0x26 || c == '+' || (0x3A <= c && c <= 0x40) || c == '\\' || (0x5B <= c && c <= 0x60) || (0x7B <= c && c <= 0x7E))
+		if (c <= 0x26 || c == '+' || (0x3A <= c && c <= 0x40) || c == '\\' || (0x5B <= c && c <= 0x60) || (0x7B <= c && c <= 0x7E))
 		{
 			sprintf(dst, "%%%02X", (unsigned char)c);
 			dst += 3;
@@ -43,30 +42,94 @@ char *EscapeParam(const char *src, int len)
 	return out;
 }
 
-char *BingWindow::GetTranslationPrefix(Language src, Language dst, const char *text)
+void BingWindow::getToken()
+{
+	if (!m_token.empty()) return;
+
+	extern HINTERNET hHttpSession[3];
+	if (HINTERNET hConnect = WinHttpConnect(hHttpSession[impersonateIE], host, port, 0))
+	{
+		if (HINTERNET hRequest = WinHttpOpenRequest(hConnect, L"GET", L"/translator", 0, WINHTTP_NO_REFERER, WINHTTP_DEFAULT_ACCEPT_TYPES, (port == 443 ? WINHTTP_FLAG_SECURE : 0)))
+		{
+			if (WinHttpSendRequest(hRequest, WINHTTP_NO_ADDITIONAL_HEADERS, 0, WINHTTP_NO_REQUEST_DATA, 0, 0, 0))
+			{
+				if (WinHttpReceiveResponse(hRequest, NULL))
+				{
+					DWORD dwSize = 0;
+					DWORD dwDownloaded = 0;
+					do
+					{
+						// Check for available data.
+						dwSize = 0;
+						if (WinHttpQueryDataAvailable(hRequest, &dwSize))
+						{
+							// Allocate space for the buffer.
+							LPSTR pszOutBuffer = new char[dwSize + 1];
+							if (pszOutBuffer)
+							{
+								// Read the Data.
+								ZeroMemory(pszOutBuffer, dwSize + 1);
+
+								if (WinHttpReadData(hRequest, (LPVOID)pszOutBuffer, dwSize, &dwDownloaded))
+								{
+									std::string str(pszOutBuffer);
+									const int32_t pos = str.find("var params_RichTranslateHelper");
+									if (pos != std::string::npos)
+									{
+										const int32_t startK = str.find("[", pos);
+										const int32_t startT = str.find(",\"", pos);
+										const int32_t endT = str.find("\",", startT + 2);
+
+										m_key = str.substr(startK + 1, startT - (startK + 1));
+										m_token = str.substr(startT + 2, endT - (startT + 2));
+
+										delete[] pszOutBuffer;
+										WinHttpCloseHandle(hRequest);
+										WinHttpCloseHandle(hConnect);
+										return;
+									}
+								}
+
+								// Free the memory allocated to the buffer.
+								delete[] pszOutBuffer;
+							}
+						}
+					} while (dwSize > 0);
+				}
+			}
+			WinHttpCloseHandle(hRequest);
+		}
+		WinHttpCloseHandle(hConnect);
+	}
+}
+
+char* BingWindow::GetTranslationPrefix(Language src, Language dst, const char* text)
 {
 	if (!postPrefixTemplate)
 		return 0;
 
-	char *srcString, *dstString;
+	char* srcString, * dstString;
 	if (!(srcString = GetLangIdString(src, 1)) || !(dstString = GetLangIdString(dst, 0)) || !strcmp(srcString, dstString))
 		return 0;
 
 	if (!text)
 		return (char*)1;
 
+	if (m_token.empty())
+		getToken();
+
 #if 0
 	int lines = 1;
-	for(const char *p = strchr(text, '\n'); p; p = strchr(p + 1, '\n'))
+	for (const char* p = strchr(text, '\n'); p; p = strchr(p + 1, '\n'))
 		lines++;
 
 	int zlen = strlen(text) * 2 + 15 * lines + 4;
-	char *text2 = (char*)malloc(strlen(text) * 2 + 15 * lines + 4), *pd = text2;
+	char* text2 = (char*)malloc(strlen(text) * 2 + 15 * lines + 4), * pd = text2;
 	strcpy(pd, "[{\"text\":\"\xEF\xBB\xBF");
 	pd += 13;
-	const char *ps = text;
-	for(; *ps; ps++)
-		switch(*ps)
+	const char* ps = text;
+	for (; *ps; ps++)
+		switch (*ps)
 		{
 			case '\r': break;
 			case '\n': strcpy(pd, "\"},{\"text\":\"\xEF\xBB\xBF"); pd += 15; break;
@@ -75,7 +138,7 @@ char *BingWindow::GetTranslationPrefix(Language src, Language dst, const char *t
 			case '\\': *pd++ = '\\'; *pd++ = '\\'; break;
 			default: *pd++ = *ps; break;
 		}
-	if(ps != text && ps[-1] == '\n')
+	if (ps != text && ps[-1] == '\n')
 		pd -= 15; /* Has to be -15 because of the "} at the beginning the , her is equal to the [ in the other string */
 	strcpy(pd, "\"}]");
 
@@ -83,10 +146,10 @@ char *BingWindow::GetTranslationPrefix(Language src, Language dst, const char *t
 	return text2;
 #endif // 0
 
-	char *text2 = EscapeParam(text, strlen(text));
+	char* text2 = EscapeParam(text, strlen(text));
 
-	char *out = (char*)malloc(strlen(postPrefixTemplate) + strlen(text2) + strlen(srcString) + strlen(dstString) + 1);
-	sprintf(out, postPrefixTemplate, text2, srcString, dstString);
+	char* out = (char*)malloc(strlen(postPrefixTemplate) + strlen(text2) + strlen(srcString) + strlen(dstString) + m_token.length() + m_key.length() + 1);
+	sprintf(out, postPrefixTemplate, text2, srcString, dstString, m_token.c_str(), m_key.c_str());
 	free(text2);
 	return out;
 }
