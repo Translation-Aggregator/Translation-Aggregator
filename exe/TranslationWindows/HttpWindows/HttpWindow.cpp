@@ -4,7 +4,7 @@
 #include "../../util/HttpUtil.h"
 #include "exe/History/History.h"
 
-extern const wchar_t userAgent[] = L"Mozilla/5.0 TranslationAggregator";
+extern const wchar_t userAgent[] = L"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:63.0) Gecko/20100101 Firefox/63.0";
 
 int numHttpWindows = 0;
 HINTERNET hHttpSession[3] = {0, 0, 0}; // Connection 2 (3) is a google specific connection which will be reset every n connections
