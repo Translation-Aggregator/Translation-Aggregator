@@ -16,7 +16,7 @@ int MakeInternet(int impersonateIE)
 {
 	if (!hHttpSession[impersonateIE])
 	{
-		const wchar_t *userAgent = HTTP_REQUEST_ID;
+		const wchar_t* userAgent = ::userAgent;// HTTP_REQUEST_ID;
 		if (impersonateIE >= 1)
 			userAgent = ::userAgent;
 		hHttpSession[impersonateIE] = WinHttpOpen(userAgent, WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, 0, 0, WINHTTP_FLAG_ASYNC);

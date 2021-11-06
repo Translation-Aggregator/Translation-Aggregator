@@ -89,6 +89,9 @@ static inline std::vector<std::string> splitStringAtEndToken(const std::string& 
 		}
 	}
 
+	if(start != s.size())
+		split.push_back(s.substr(start, std::string::npos));
+
 	return split;
 }
 
