@@ -1,117 +1,74 @@
 #include <Shared/Shrink.h>
 #include "GoogleWindow.h"
 #include <Shared/StringUtil.h>
-#include <ctime>
-#include <string>
-#include <optional>
-#include <atomic>
-#include <memory>
-#include <functional>
-#include <regex>
-#include <cstdio>
-#include <locale>
-#include <codecvt>
 
 #define TKK
 
-
 #ifdef TKK
-
-//Code pulled from Textractor, which is under GPLv3 license
-
-static unsigned tkk_id = 0;
-
-inline std::wstring StringToWideString(const std::string& text)
+int64_t vi(int64_t r, std::string o)
 {
-	std::vector<wchar_t> buffer(text.size() + 1);
-	MultiByteToWideChar(CP_UTF8, 0, text.c_str(), -1, buffer.data(), buffer.size());
-	return buffer.data();
-}
-
-template <auto F>
-struct Functor
-{
-	template <typename... Args>
-	auto operator()(Args&&... args) const { return std::invoke(F, std::forward<Args>(args)...); }
-};
-
-template <typename HandleCloser = Functor<CloseHandle>>
-class AutoHandle
-{
-public:
-	AutoHandle(HANDLE h) : h(h) {}
-	operator HANDLE() { return h.get(); }
-	PHANDLE operator&() { static_assert(sizeof(*this) == sizeof(HANDLE)); return (PHANDLE)this; }
-	operator bool() { return h.get() != NULL && h.get() != INVALID_HANDLE_VALUE; }
-
-private:
-	struct HandleCleaner { void operator()(void* h) { if (h != INVALID_HANDLE_VALUE) HandleCloser()(h); } };
-	std::unique_ptr<void, HandleCleaner> h;
-};
-
-inline std::string WideStringToString(const std::wstring& text)
-{
-	std::vector<char> buffer((text.size() + 1) * 4);
-	WideCharToMultiByte(CP_UTF8, 0, text.c_str(), -1, buffer.data(), buffer.size(), nullptr, nullptr);
-	return buffer.data();
-}
-using InternetHandle = AutoHandle<Functor<WinHttpCloseHandle>>;
-
-inline std::optional<std::wstring> ReceiveHttpRequest(HINTERNET request)
-{
-	WinHttpReceiveResponse(request, NULL);
-	std::string data;
-	DWORD dwSize, dwDownloaded;
-	do
+	for(size_t t = 0; t < o.length() - 2; t += 3)
 	{
-		dwSize = 0;
-		WinHttpQueryDataAvailable(request, &dwSize);
-		if (!dwSize) break;
-		std::vector<char> buffer(dwSize);
-		WinHttpReadData(request, buffer.data(), dwSize, &dwDownloaded);
-		data.append(buffer.data(), dwDownloaded);
-	} while (dwSize > 0);
-
-	if (data.empty()) return {};
-	return StringToWideString(data);
+		int64_t a = o.at(t + 2);
+		a = a >= 'a' ? a - 87 : a - '0';
+		a = '+' == o.at(t + 1) ? r >> a : r << (int32_t)a;
+		r = '+' == o.at(t) ? r + a & 4294967295 : r ^ a;
 }
 
-static HINTERNET internet = NULL;
-
-void try_retrieve_token(bool force = false) {
-	if (!tkk_id || force)
-		if (!internet) internet = WinHttpOpen(L"Mozilla/5.0 TranslationAggregator", WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, NULL, NULL, 0);
-			if (InternetHandle connection = WinHttpConnect(internet, L"translate.google.com", INTERNET_DEFAULT_HTTPS_PORT, 0))
-				if (InternetHandle request = WinHttpOpenRequest(connection, L"GET", L"/", NULL, NULL, NULL, WINHTTP_FLAG_SECURE))
-					if (WinHttpSendRequest(request, NULL, 0, NULL, 0, 0, NULL))
-						if (auto response = ReceiveHttpRequest(request))
-							if (std::wsmatch results; std::regex_search(response.value(), results, std::wregex(L"(\\d{7,})'"))) tkk_id = stoll(results[1]);
+	return r;
 }
 
-std::wstring tk(const wchar_t *pStr, std::string translateFrom, std::string translateTo)
+std::string tk(const wchar_t *pStr)
 {
-	try_retrieve_token(false);
-	if (!tkk_id)
-		return L"";
-	std::wstring escapedText;
-	unsigned a = _time64(NULL) / 3600, b = a; // <- the first part of TKK
-	for (unsigned char ch : WideStringToString(pStr))
+	std::wstring r(pStr);
+
+	int64_t m = 425635;
+	int64_t s = 1953544246;
+	std::vector<int64_t> S;
+
+	for(size_t v = 0; v < r.length(); v++)
 	{
-		wchar_t escapedChar[4] = {};
-		swprintf_s<4>(escapedChar, L"%%%02X", (int)ch);
-		escapedText += escapedChar;
-		a += ch;
-		a += a << 10;
-		a ^= a >> 6;
+		int64_t A = (int32_t)r.at(v);
+		if(128 > A)
+			S.push_back(A);
+		else
+		{
+			if(2048 > A)
+				S.push_back(A >> 6 | 192);
+			else if(55296 == (64512 & A) && v + 1 < r.length() && 56320 == (64512 & r.at(v + 1)))
+			{
+				A = 65536 + ((1023 & A) << 10) + (1023 & r.at(++v));
+				S.push_back(A >> 18 | 240);
+				S.push_back(A >> 12 & 63 | 128);
+			}
+			else
+			{
+				S.push_back(A >> 12 | 224);
+				S.push_back(A >> 6 & 63 | 128);
+			}
+
+			S.push_back(63 & A | 128);
+		}
 	}
-	a += a << 3;
-	a ^= a >> 11;
-	a += a << 15;
-	a ^= tkk_id;
-	a %= 1000000;
-	b ^= a;
 
-	return L"/translate_a/single?client=webapp&dt=ld&dt=rm&dt=t&sl=" + StringToWideString(translateFrom) + L"&tl=" + StringToWideString(translateTo) + L"&ie=UTF-8&oe=UTF-8&tk=" + std::to_wstring(a) + L"." + std::to_wstring(b) + L"&q=" + escapedText;
+	std::string F = "+-a^+6";
+	std::string D = "+-3^+b+-f";
+	int64_t p = m;
+
+	for(size_t b = 0; b < S.size(); b++)
+	{
+		p += S[b];
+		p = vi(p, F);
+	}
+
+	p = vi(p, D);
+	p ^= s;
+	if(0 > p)
+		p = (2147483647 & p) + 2147483648;
+
+	p %= (int64_t)1e6;
+
+	return std::to_string(p) + "." + std::to_string(p ^ m);
 }
 #endif
 
@@ -121,13 +78,13 @@ GoogleWindow::GoogleWindow() : HttpWindow(L"Google", L"https://translate.google.
 #ifndef TKK
 	path = L"/translate_a/single?client=gtx&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&q=%s";
 #else
-	path = L"/translate_a/single?client=webapp&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&tk=%hs&q=%s";
+	path = L"/translate_a/single?client=t&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&tk=%hs&q=%s";
 #endif
 	port = 443;
 	dontEscapeRequest = true;
-	impersonateIE = 0;
-	// m_pOrgRequestHeaders = requestHeaders;
-	// m_tlCnt = 0;
+	impersonateIE = 2;
+	m_pOrgRequestHeaders = requestHeaders;
+	m_tlCnt = 0;
 }
 
 GoogleWindow::~GoogleWindow()
@@ -143,44 +100,32 @@ wchar_t *GoogleWindow::GetTranslationPath(Language src, Language dst, const wcha
 	if (!text)
 		return _wcsdup(L"");
 
-	// wchar_t *HttpEscapeParamW(const wchar_t *src, int len);
-	// wchar_t *etext = HttpEscapeParamW(text, wcslen(text));
-	// int len = wcslen(path) + strlen(srcString) + strlen(dstString) + wcslen(etext) + 1 + 16;
-	// wchar_t *out = (wchar_t*)malloc(len*sizeof(wchar_t));
+	wchar_t *HttpEscapeParamW(const wchar_t *src, int len);
+	wchar_t *etext = HttpEscapeParamW(text, wcslen(text));
+	int len = wcslen(path) + strlen(srcString) + strlen(dstString) + wcslen(etext) + 1 + 16;
+	wchar_t *out = (wchar_t*)malloc(len*sizeof(wchar_t));
 
-	// m_tlCnt++;
+	if(m_cookie.empty() || m_tlCnt >= 100)
+	{
+		m_tlCnt = 0;
+		GetCookie();
+		wchar_t *pBuf = (wchar_t*)malloc((wcslen(m_pOrgRequestHeaders) + 10) * sizeof(wchar_t) + (m_cookie.length() + 1) * sizeof(wchar_t));
+		swprintf(pBuf, L"%s;Cookie: %s", m_pOrgRequestHeaders, m_cookie.c_str());
+		requestHeaders = pBuf;
+	}
+
+	m_tlCnt++;
 
 #ifndef TKK
 	swprintf(out, len, path, srcString, dstString, etext);
 #else
 
-	// std::string tkStr = ;
+	std::string tkStr = tk(text);
 
-	// if (tkStr != "")
-	// 	swprintf(out, len, path, srcString, dstString, tkStr.c_str(), etext);
-	// else
-	// 	return _wcsdup(L"");
-    using convert_type = std::codecvt_utf8<wchar_t>;
-    std::wstring_convert<convert_type, wchar_t> converter;
-
-	return _wcsdup(tk(text, srcString, dstString).c_str());
+	swprintf(out, len, path, srcString, dstString, tkStr.c_str(), etext);
 #endif
-	// free(etext);
-	// return out;
-}
-
-static bool IsHash(const std::wstring& result)
-{
-	return result.size() == 32 && std::all_of(result.begin(), result.end(), [](auto ch) { return (ch >= L'0' && ch <= L'9') || (ch >= L'a' && ch <= L'z'); });
-}
-
-static std::wstring ReplaceString(std::wstring subject, const std::wstring& search, const std::wstring& replace) {
-	size_t pos = 0;
-	while ((pos = subject.find(search, pos)) != std::wstring::npos) {
-		subject.replace(pos, search.length(), replace);
-		pos += replace.length();
-	}
-	return subject;
+	free(etext);
+	return out;
 }
 
 wchar_t *GoogleWindow::FindTranslatedText(wchar_t* html)
@@ -203,15 +148,13 @@ wchar_t *GoogleWindow::FindTranslatedText(wchar_t* html)
 	ps[d - 1] = 0;
 	return html;
 #else
-	if (html[0] == L'[')
+	wchar_t *end;
+	if ((html = wcsstr(html, L"[[[\"")) && (end = wcsstr(html += 4, L"]],")))
 	{
-		std::wstring response(html);
-		std::wstring translation;
-		for (std::wsmatch results; std::regex_search(response, results, std::wregex(L"\\[\"(.*?)\",[n\"]")); response = results.suffix())
-			if (!IsHash(results[1])) translation += ReplaceString(std::wstring(results[1]), L"\\n", L"\n") + L" ";
-		if (!translation.empty()) return const_cast<wchar_t*>(_wcsdup(translation.c_str()));
+		*end = 0;
+		ParseJSON(html, NULL, L"],[\"", true);
+		return html;
 	}
-	tkk_id = 0;
 	return NULL;
 #endif
 }
@@ -410,10 +353,4 @@ char* GoogleWindow::GetLangIdString(Language lang, int src)
 		default:
 			return 0;
 	}
-}
-
-char *GoogleWindow::GetTranslationPrefix(Language src, Language dst, const char *text)
-{
-	try_retrieve_token(false);
-	return HttpWindow::GetTranslationPrefix(src, dst, text);
 }
