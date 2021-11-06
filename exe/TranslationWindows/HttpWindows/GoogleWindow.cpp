@@ -123,7 +123,7 @@ GoogleWindow::GoogleWindow() : HttpWindow(L"Google", L"http://translate.google.c
 #ifndef TKK
 	path = L"/translate_a/single?client=gtx&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&q=%s";
 #else
-	path = L"/_/TranslateWebserverUi/data/batchexecute?rpcids=MkEWBc&f.sid=%lld&bl=boq_translate-webserver_20210630.09_p0&hl=en-US&soc-app=1&soc-platform=1&soc-device=1&_reqid=%d&rt=c";
+	path = L"/_/TranslateWebserverUi/data/batchexecute?rpcids=MkEWBc&f.sid=%lld&bl=boq_translate-webserver_20211006.11_p0&hl=en-US&soc-app=1&soc-platform=1&soc-device=1&_reqid=%d&rt=c";
 //	path = L"/translate_a/single?client=webapp&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&tk=%hs&q=%s";
 #endif
 	port = 443;
@@ -276,7 +276,8 @@ wchar_t *GoogleWindow::FindTranslatedText(wchar_t* html)
 		str = str.substr(0, p);
 		json j = json::parse(str);
 		j = json::parse(std::string(j[0][2]));
-		out = j[1][0][0][5][0][0];
+		for (const auto& entry : j[1][0][0][5])
+			out += entry[0];
 	}
 	catch (const std::exception& e)
 	{
@@ -289,8 +290,9 @@ wchar_t *GoogleWindow::FindTranslatedText(wchar_t* html)
 
 	std::wstring result = ToWstring(out);
 
-	m_pResult = new wchar_t[result.size() + 1]();
-	wsprintf(m_pResult, L"%s", result.c_str());
+//	m_pResult = new wchar_t[result.size() * 2 + 1]();
+//	wsprintf(m_pResult, L"%s", result.c_str());
+	m_pResult = _wcsdup(result.c_str());
 
 
 	return m_pResult;
