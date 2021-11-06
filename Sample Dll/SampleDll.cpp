@@ -2,7 +2,7 @@
 #define EXPORT __declspec(dllexport)
 
 #define _CRT_SECURE_NO_WARNINGS
-#include <Windows.h>
+#include <windows.h>
 #include "TAPlugin.h"
 
 EXPORT unsigned int TAPluginGetVersion(const void *)

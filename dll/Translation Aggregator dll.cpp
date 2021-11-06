@@ -11,10 +11,10 @@
 // used)).
 
 #include <Shared/Shrink.h>
-#include <Tlhelp32.h>
+#include <tlhelp32.h>
 #include <Shared/StringUtil.h>
 #include <Shared/Atlas.h>
-#include <Psapi.h>
+#include <psapi.h>
 #include "WindowTranslator.h"
 #include "GetText.h"
 

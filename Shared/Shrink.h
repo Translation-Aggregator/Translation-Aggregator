@@ -1,6 +1,6 @@
 #pragma once
 // Global file.  Takes care of memory allocation functions and includes
-// Windows.h.
+// windows.h.
 
 #ifndef UNICODE
 #define UNICODE
@@ -9,8 +9,8 @@
 #define WIN32_LEAN_AND_MEAN
 #define _WIN32_WINNT 0x0501
 #define INITGUID
-#include <Windows.h>
-#include <WinSock2.h>
+#include <windows.h>
+#include <winsock2.h>
 #include <stdio.h>
 #ifndef NO_STD
 #include <string>
@@ -25,20 +25,20 @@
 #include <shellapi.h>
 
 // Needed for typedefs used by http windows.
-#include <Winhttp.h>
+#include <winhttp.h>
 
 // Needed all over the place
-#include <CommCtrl.h>
+#include <commctrl.h>
 
 // Here because so many files use its messages.
-#include <Richedit.h>
+#include <richedit.h>
 
 // Used by most of the external dll-dependent cpp files (Both Atlas ones, Mecab)
 #include <shlobj.h>
 
 #include <time.h>
 
-#include <Psapi.h>
+#include <psapi.h>
 
 //#include <D2d1.h>
 //#include <Dwrite.h>

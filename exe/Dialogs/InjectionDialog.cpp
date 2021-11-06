@@ -5,7 +5,7 @@
 #include <Shared/DllInjection.h>
 #include "../TranslationWindows/LocalWindows/AtlasWindow.h"
 #include "../util/Injector.h"
-#include <Shobjidl.h>
+#include <shobjidl.h>
 #include <shlguid.h>
 
 #include "../resource.h"
