@@ -2,7 +2,7 @@
 #include "JParseWindow.h"
 #include "../../util/Dictionary.h"
 
-#include "../../config.h"
+#include "../../Config.h"
 
 #include "../../resource.h"
 

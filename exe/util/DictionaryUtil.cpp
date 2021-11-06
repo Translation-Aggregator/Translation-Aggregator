@@ -1,8 +1,8 @@
 #include <Shared/Shrink.h>
 #include "Dictionary.h"
 #include "DictionaryUtil.h"
-#include "../config.h"
-#include "../Dialogs/MyTooltip.h"
+#include "../Config.h"
+#include "../Dialogs/MyToolTip.h"
 
 int PopupDef(wchar_t *word, RECT &clientRect, RECT &globalRect, HWND hWnd)
 {

@@ -3,7 +3,7 @@
 #include "../../util/Mecab.h"
 #include <Shared/StringUtil.h>
 #include <Shared/ProcessUtil.h>
-#include "../../config.h"
+#include "../../Config.h"
 
 #include "../../resource.h"
 

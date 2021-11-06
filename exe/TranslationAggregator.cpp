@@ -15,7 +15,7 @@
 #include "TranslationWindows/LocalWindows/FuriganaWindow.h"
 #endif
 
-#include "config.h"
+#include "Config.h"
 #include "util/Injector.h"
 
 #include <Shared/DllInjection.h>

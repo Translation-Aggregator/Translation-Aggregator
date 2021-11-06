@@ -1,6 +1,6 @@
 #include <Shared/Shrink.h>
 #include "UntranslatedWindow.h"
-#include "../../config.h"
+#include "../../Config.h"
 
 #include "../../resource.h"
 

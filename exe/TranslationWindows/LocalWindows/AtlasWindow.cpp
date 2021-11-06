@@ -2,7 +2,7 @@
 #include "AtlasWindow.h"
 #include <Shared/StringUtil.h>
 #include <Shared/ProcessUtil.h>
-#include "../../config.h"
+#include "../../Config.h"
 #include <Shared/Atlas.h>
 #include <Shared/Thread.h>
 
