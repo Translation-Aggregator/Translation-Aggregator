@@ -1,0 +1,78 @@
+name: Continuous Integration
+on:
+  push:
+    paths:
+      - "**.c"
+      - "**.h"
+      - "**.cpp"
+      - "**.hpp"
+      - "**.build"
+      - "**.in"
+      - "**.yml"
+  pull_request:
+    paths:
+      - "**.c"
+      - "**.h"
+      - "**.cpp"
+      - "**.hpp"
+      - "**.build"
+      - "**.in"
+      - "**.yml"
+
+jobs:
+  build-win32:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+        with:
+          submodules: recursive
+      - run: sudo apt-get update
+      - run: sudo apt-get install build-essential mingw-w64
+      - run: sudo update-alternatives --set i686-w64-mingw32-gcc /usr/bin/i686-w64-mingw32-gcc-posix
+      - run: sudo update-alternatives --set i686-w64-mingw32-g++ /usr/bin/i686-w64-mingw32-g++-posix
+      - uses: actions/setup-python@v1
+        with:
+          python-version: '3.x'
+      - uses: actions/cache@v1
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip
+          restore-keys: |
+            ${{ runner.os }}-pip
+      - run: python -m pip install --upgrade meson ninja
+      - run: meson setup build/ --cross-file ./3rdParty/meson_toolchains/mingw32_meson.ini
+      - run: meson compile -C build archive
+      - uses: actions/upload-artifact@master
+        with:
+          name: TranslationAggregator-win32
+          path: build/*.7z
+
+  create-release:
+    needs: [build-win32]
+    runs-on: ubuntu-20.04
+    if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
+    steps:
+    - name: Download win32 artifact
+      uses: actions/download-artifact@v1
+      with:
+        name: TranslationAggregator-win32
+
+    - name: Create prerelease
+      if: github.ref == 'refs/heads/master'
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: true
+        automatic_release_tag: "latest"
+        title: "Latest development builds"
+        files: |
+          TranslationAggregator-win32/*
+
+    - name: Create release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: marvinpinto/action-automatic-releases@latest
+      with:
+        repo_token: "${{ secrets.GITHUB_TOKEN }}"
+        prerelease: "${{ contains(github.ref, '-rc') }}"
+        files: |
+          TranslationAggregator-win32/*
