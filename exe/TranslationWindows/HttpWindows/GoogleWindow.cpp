@@ -78,7 +78,7 @@ GoogleWindow::GoogleWindow() : HttpWindow(L"Google", L"https://translate.google.
 #ifndef TKK
 	path = L"/translate_a/single?client=gtx&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&q=%s";
 #else
-	path = L"/translate_a/single?client=t&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&tk=%hs&q=%s";
+	path = L"/translate_a/single?client=webapp&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&tk=%hs&q=%s";
 #endif
 	port = 443;
 	dontEscapeRequest = true;
