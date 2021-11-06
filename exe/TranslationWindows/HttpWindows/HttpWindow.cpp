@@ -4,7 +4,7 @@
 #include "../../util/HttpUtil.h"
 #include "exe/History/History.h"
 
-extern const wchar_t userAgent[] = L"Mozilla/5.0 (Windows NT 6.1; Win64; x64; rv:63.0) Gecko/20100101 Firefox/63.0";
+extern const wchar_t userAgent[] = L"Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101 Firefox/91.0";
 
 int numHttpWindows = 0;
 HINTERNET hHttpSession[3] = {0, 0, 0}; // Connection 2 (3) is a google specific connection which will be reset every n connections
@@ -17,7 +17,7 @@ int MakeInternet(int impersonateIE)
 	if (!hHttpSession[impersonateIE])
 	{
 		const wchar_t *userAgent = HTTP_REQUEST_ID;
-		if (impersonateIE == 1)
+		if (impersonateIE >= 1)
 			userAgent = ::userAgent;
 		hHttpSession[impersonateIE] = WinHttpOpen(userAgent, WINHTTP_ACCESS_TYPE_DEFAULT_PROXY, 0, 0, WINHTTP_FLAG_ASYNC);
 	}

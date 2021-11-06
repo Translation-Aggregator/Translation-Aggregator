@@ -2,6 +2,14 @@
 #include "GoogleWindow.h"
 #include <Shared/StringUtil.h>
 
+#include <algorithm>
+#include <sstream>
+#include <fstream>
+
+#include <json.hpp>
+
+using json = nlohmann::json;
+
 #define TKK
 
 #ifdef TKK
@@ -72,19 +80,60 @@ std::string tk(const wchar_t *pStr)
 }
 #endif
 
-GoogleWindow::GoogleWindow() : HttpWindow(L"Google", L"https://translate.google.com/")
+// From: https://stackoverflow.com/a/24315631
+std::string ReplaceAll(std::string str, const std::string& from, const std::string& to)
+{
+	if (from.empty()) return str;
+
+	size_t start_pos = 0;
+	while ((start_pos = str.find(from, start_pos)) != std::string::npos)
+	{
+		str.replace(start_pos, from.length(), to);
+		start_pos += to.length(); // Handles case where 'to' is a substring of 'from'
+	}
+	return str;
+}
+
+
+char* GoogleEscapeParamA(const char* src, int len)
+{
+	char* out = (char*)malloc(sizeof(char) * (3 * strlen(src) + 1));
+	char* dst = out;
+	while (len)
+	{
+		len--;
+		char c = *src;
+		if (c <= 0x26 || c == '+' || c == ',' || (0x3A <= c && c <= 0x40) || c == '\\' || (0x5B <= c && c <= 0x60) || (0x7B <= c && c <= 0x7E))
+		{
+			sprintf(dst, "%%%02X", (unsigned char)c);
+			dst += 3;
+			src++;
+			continue;
+		}
+		dst++[0] = c;
+		src++;
+	}
+	*dst = 0;
+	return out;
+}
+
+GoogleWindow::GoogleWindow() : HttpWindow(L"Google", L"http://translate.google.com/"), m_pResult(nullptr)
 {
 	host = L"translate.google.com";
 #ifndef TKK
 	path = L"/translate_a/single?client=gtx&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&q=%s";
 #else
-	path = L"/translate_a/single?client=webapp&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&tk=%hs&q=%s";
+	path = L"/_/TranslateWebserverUi/data/batchexecute?rpcids=MkEWBc&f.sid=%lld&bl=boq_translate-webserver_20210630.09_p0&hl=en-US&soc-app=1&soc-platform=1&soc-device=1&_reqid=%d&rt=c";
+//	path = L"/translate_a/single?client=webapp&dt=t&sl=%hs&tl=%hs&ie=UTF-8&oe=UTF-8&tk=%hs&q=%s";
 #endif
 	port = 443;
 	dontEscapeRequest = true;
 	impersonateIE = 2;
-	m_pOrgRequestHeaders = requestHeaders;
+	postPrefixTemplate = "[[[\"MkEWBc\",\"[[\\\"%s\\\",\\\"%s\\\",\\\"%s\\\",true],[null]]\",null,\"generic\"]]]";
+	requestHeaders = L"Content-Type: application/x-www-form-urlencoded;charset=utf-8;";
+	m_pOrgRequestHeaders = L"Content-Type: application/x-www-form-urlencoded; charset=UTF-8;";
 	m_tlCnt = 0;
+	m_cookiePath = L"/";
 }
 
 GoogleWindow::~GoogleWindow()
@@ -100,30 +149,31 @@ wchar_t *GoogleWindow::GetTranslationPath(Language src, Language dst, const wcha
 	if (!text)
 		return _wcsdup(L"");
 
-	std::wstring eText = L"";
+	//std::wstring eText = L"";
 
-	std::vector<char> vec((wcslen(text) + 1) * 4);
-	WideCharToMultiByte(CP_UTF8, 0, text, -1, vec.data(), vec.size(), nullptr, nullptr);
-	std::string str(vec.data());
+	//std::vector<char> vec((wcslen(text) + 1) * 4);
+	//WideCharToMultiByte(CP_UTF8, 0, text, -1, vec.data(), vec.size(), nullptr, nullptr);
+	//std::string str(vec.data());
 
-	for (const unsigned char& c : str)
-	{
-		wchar_t e[4] = { 0 };
-		swprintf_s<4>(e, L"%%%02X", static_cast<int32_t>(c));
-		eText.append(e);
-	}
+	//for (const unsigned char& c : str)
+	//{
+	//	wchar_t e[4] = { 0 };
+	//	swprintf_s<4>(e, L"%%%02X", static_cast<int32_t>(c));
+	//	eText.append(e);
+	//}
 
-	int len = wcslen(path) + strlen(srcString) + strlen(dstString) + eText.length() + 1 + 16;
-	wchar_t *out = (wchar_t*)malloc(len*sizeof(wchar_t));
+	//const int len = wcslen(path) + strlen(srcString) + strlen(dstString) + eText.length() + 1 + 16;
 
-	if(m_cookie.empty() || m_tlCnt >= 100)
-	{
-		m_tlCnt = 0;
-		GetCookie();
-		wchar_t *pBuf = (wchar_t*)malloc((wcslen(m_pOrgRequestHeaders) + 10) * sizeof(wchar_t) + (m_cookie.length() + 1) * sizeof(wchar_t));
-		swprintf(pBuf, L"%s;Cookie: %s", m_pOrgRequestHeaders, m_cookie.c_str());
-		requestHeaders = pBuf;
-	}
+	//if(m_cookie.empty() || m_tlCnt >= 100)
+	//{
+	//	//free(requestHeaders);
+	//	m_tlCnt = 0;
+	//	GetCookie();
+	//	int32_t bufSize = (wcslen(m_pOrgRequestHeaders) + 10) * sizeof(wchar_t) + (m_cookie.length() + 1) * sizeof(wchar_t);
+	//	wchar_t *pBuf = reinterpret_cast<wchar_t*>(malloc(bufSize));
+	//	swprintf_s(pBuf, bufSize, L"%s;Cookie: %s", m_pOrgRequestHeaders, m_cookie.c_str());
+	//	requestHeaders = pBuf;
+	//}
 
 	m_tlCnt++;
 
@@ -131,12 +181,57 @@ wchar_t *GoogleWindow::GetTranslationPath(Language src, Language dst, const wcha
 	swprintf(out, len, path, srcString, dstString, etext);
 #else
 
-	std::string tkStr = tk(text);
+	//std::string tkStr = tk(text);
 
-	swprintf(out, len, path, srcString, dstString, tkStr.c_str(), eText.c_str());
+	constexpr int64_t sid = 8313535539834510881;
+	constexpr int32_t reqid = 53678;
+
+	const int len = wcslen(path) + 64; // 64 - more than enough space to store the sid and reqid
+	wchar_t *out = static_cast<wchar_t*>(calloc(len, sizeof(wchar_t)));
+	swprintf(out, len, path, sid, reqid);
+	//swprintf(out, len, path, srcString, dstString, tkStr.c_str(), eText.c_str());
 #endif
 	return out;
 }
+
+char* GoogleWindow::GetTranslationPrefix(Language src, Language dst, const char* text)
+{
+	if (!postPrefixTemplate)
+		return 0;
+
+	char* srcString, * dstString;
+	if (!(srcString = GetLangIdString(src, 1)) || !(dstString = GetLangIdString(dst, 0)) || !strcmp(srcString, dstString))
+		return 0;
+
+	if (!text)
+		return reinterpret_cast<char*>(1);
+
+	std::string rawText(text);
+	rawText = ReplaceAll(rawText, "\"", "\\\\\\\"");
+	rawText = ReplaceAll(rawText, "\n", "\\\\n");
+	rawText = ReplaceAll(rawText, "\r", "");
+
+	int32_t len = strlen(postPrefixTemplate) + rawText.length() + strlen(srcString) + strlen(dstString) + 1;
+	char* pOut = static_cast<char*>(calloc(len, sizeof(char)));
+	snprintf(pOut, len, postPrefixTemplate, rawText.c_str(), srcString, dstString);
+
+	rawText = std::string(pOut);
+	char* pEsc = GoogleEscapeParamA(rawText.c_str(), rawText.length());
+	rawText = std::string(pEsc);
+	free(pEsc);
+	free(pOut);
+
+	rawText.insert(0, "f.req=");
+	rawText.append("&");
+	len = rawText.length() + 1;
+	pOut = static_cast<char*>(calloc(len, sizeof(char)));
+
+	snprintf(pOut, len, "%s", rawText.c_str());
+
+	//free(text2);
+	return pOut;
+}
+
 
 wchar_t *GoogleWindow::FindTranslatedText(wchar_t* html)
 {
@@ -158,13 +253,47 @@ wchar_t *GoogleWindow::FindTranslatedText(wchar_t* html)
 	ps[d - 1] = 0;
 	return html;
 #else
-	if ((html = wcsstr(html, L"[[[\"")))
+	//if ((html = wcsstr(html, L"[[[\"")))
+	//{
+	//	html += 4;
+	//	ParseJSON(html, NULL, L"]\n,[\"", true);
+	//	return html;
+	//}
+
+	if (m_pResult) delete[] m_pResult;
+
+	std::string str;
+	std::string out = "";
+
+	try
 	{
-		html += 4;
-		ParseJSON(html, NULL, L"]\n,[\"", true);
-		return html;
+		std::vector<char> vec((wcslen(html) + 1) * 4);
+		WideCharToMultiByte(CP_UTF8, 0, html, -1, vec.data(), vec.size(), nullptr, nullptr);
+		str = std::string(vec.data());
+		int32_t p = str.find("[");
+		str = str.substr(p);
+		p = str.find("\n");
+		str = str.substr(0, p);
+		json j = json::parse(str);
+		j = json::parse(std::string(j[0][2]));
+		out = j[1][0][0][5][0][0];
 	}
-	return NULL;
+	catch (const std::exception& e)
+	{
+		std::ofstream err("error2.txt");
+		err << e.what() << std::endl;
+		err << str << std::endl;
+		err.close();
+	}
+
+
+	std::wstring result = ToWstring(out);
+
+	m_pResult = new wchar_t[result.size() + 1]();
+	wsprintf(m_pResult, L"%s", result.c_str());
+
+
+	return m_pResult;
 #endif
 }
 
