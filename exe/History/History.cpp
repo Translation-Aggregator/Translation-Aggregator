@@ -1,4 +1,4 @@
-#include "Shared/shrink.h"
+#include "Shared/Shrink.h"
 
 #include "exe/History/History.h"
 
