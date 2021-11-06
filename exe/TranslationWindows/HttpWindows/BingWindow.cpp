@@ -1,13 +1,16 @@
 #include <Shared/Shrink.h>
 #include "BingWindow.h"
 
-BingWindow::BingWindow() : HttpWindow(L"Bing", L"https://www.bing.com/ttranslatev3/")
+const std::wstring CONTENT_TYPE = L"Content-Type: application/x-www-form-urlencoded; Referer: https://www.bing.com/translator; ";
+
+BingWindow::BingWindow() : HttpWindow(L"Bing", L"https://www.bing.com/ttranslatev3/"),
+m_useCnt(0)
 {
 	host = L"www.bing.com";
-	path = L"/ttranslatev3";
+	path = L"/ttranslatev3?isVertical=1&=&IG=%s&IID=%s.%u";
 	postPrefixTemplate = "&text=%s&fromLang=%s&to=%s&token=%s&key=%s&isAuthv2=true";
 	port = 80;
-	requestHeaders = L"Content-Type: application/x-www-form-urlencoded";
+	requestHeaders = nullptr; //L"Content-Type: application/x-www-form-urlencoded";
 	dontEscapeRequest = true;
 }
 BingWindow::~BingWindow()
@@ -16,7 +19,10 @@ BingWindow::~BingWindow()
 wchar_t* BingWindow::FindTranslatedText(wchar_t* html)
 {
 	if (!ParseJSON(html, L"\"text\":\"", L"\"text\":\""))
+	{
+		getToken();
 		return NULL;
+	}
 	return html;
 }
 
@@ -44,7 +50,7 @@ char* EscapeParam(const char* src, int len)
 
 void BingWindow::getToken()
 {
-	if (!m_token.empty()) return;
+	//	if (!m_token.empty()) return;
 
 	extern HINTERNET hHttpSession[3];
 	if (HINTERNET hConnect = WinHttpConnect(hHttpSession[impersonateIE], host, port, 0))
@@ -55,8 +61,41 @@ void BingWindow::getToken()
 			{
 				if (WinHttpReceiveResponse(hRequest, NULL))
 				{
+					if (m_cookie.empty())
+					{
+
+						m_cookie.clear();
+						m_cookie = L";Cookie: ";
+
+						DWORD index = 0;
+						{
+							for (;;)
+							{
+								DWORD err = GetLastError();
+								DWORD index2 = index;
+								DWORD len = 0;
+								WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_SET_COOKIE, WINHTTP_HEADER_NAME_BY_INDEX, NULL, &len, &index2);
+								err = GetLastError();
+
+								if (GetLastError() != ERROR_INSUFFICIENT_BUFFER)
+									break;
+
+								wchar_t* pBuffer = reinterpret_cast<wchar_t*>(calloc(len, sizeof(wchar_t)));
+								if (!pBuffer)
+									break;
+
+								if (!WinHttpQueryHeaders(hRequest, WINHTTP_QUERY_SET_COOKIE, WINHTTP_HEADER_NAME_BY_INDEX, pBuffer, &len, &index))
+									break;
+
+								m_cookie.append(pBuffer);
+								m_cookie.append(L"; ");
+							}
+						}
+					}
+
 					DWORD dwSize = 0;
 					DWORD dwDownloaded = 0;
+					std::string data = "";
 					do
 					{
 						// Check for available data.
@@ -73,21 +112,7 @@ void BingWindow::getToken()
 								if (WinHttpReadData(hRequest, (LPVOID)pszOutBuffer, dwSize, &dwDownloaded))
 								{
 									std::string str(pszOutBuffer);
-									const int32_t pos = str.find("var params_RichTranslateHelper");
-									if (pos != std::string::npos)
-									{
-										const int32_t startK = str.find("[", pos);
-										const int32_t startT = str.find(",\"", pos);
-										const int32_t endT = str.find("\",", startT + 2);
-
-										m_key = str.substr(startK + 1, startT - (startK + 1));
-										m_token = str.substr(startT + 2, endT - (startT + 2));
-
-										delete[] pszOutBuffer;
-										WinHttpCloseHandle(hRequest);
-										WinHttpCloseHandle(hConnect);
-										return;
-									}
+									data.append(str);
 								}
 
 								// Free the memory allocated to the buffer.
@@ -95,6 +120,32 @@ void BingWindow::getToken()
 							}
 						}
 					} while (dwSize > 0);
+
+					const int32_t pos = data.find("var params_RichTranslateHelper");
+					if (pos != std::string::npos)
+					{
+						const int32_t startK = data.find("[", pos);
+						const int32_t startT = data.find(",\"", pos);
+						const int32_t endT = data.find("\",", startT + 2);
+
+						m_key = data.substr(startK + 1, startT - (startK + 1));
+						m_token = data.substr(startT + 2, endT - (startT + 2));
+
+						const int32_t startIG = data.find("\",IG:\"") + 6;
+						const int32_t endIG = data.find("\"", startIG);
+						const int32_t startIID = data.find("data-iid=\"") + 10;
+						const int32_t endIID = data.find("\"", startIID);
+
+						m_ig = data.substr(startIG, endIG - startIG);
+						m_iid = data.substr(startIID, endIID - startIID);
+					}
+
+
+					if (requestHeaders)
+						delete[] requestHeaders;
+					int32_t bufSize = CONTENT_TYPE.length() + m_cookie.length() + 10;
+					requestHeaders = new wchar_t[bufSize];
+					swprintf_s(requestHeaders, bufSize, L"%s%s", CONTENT_TYPE.c_str(), m_cookie.c_str());
 				}
 			}
 			WinHttpCloseHandle(hRequest);
@@ -103,8 +154,36 @@ void BingWindow::getToken()
 	}
 }
 
+wchar_t* BingWindow::GetTranslationPath(Language src, Language dst, const wchar_t* text)
+{
+	if (m_token.empty() || m_useCnt > 100)
+	{
+		getToken();
+		m_useCnt = 0;
+	}
+
+	char* srcString, * dstString;
+	if (!(srcString = GetLangIdString(src, 1)) || !(dstString = GetLangIdString(dst, 0)) || !strcmp(srcString, dstString))
+		return 0;
+
+	if (!text)
+		return _wcsdup(L"");
+
+	const int len = wcslen(path) + m_ig.length() * 2 + m_iid.length() * 2 + 10;
+	wchar_t* out = static_cast<wchar_t*>(calloc(len, sizeof(wchar_t)));
+	swprintf(out, len, path, ToWstring(m_ig).c_str(), ToWstring(m_iid).c_str(), m_useCnt);
+
+	return out;
+}
+
 char* BingWindow::GetTranslationPrefix(Language src, Language dst, const char* text)
 {
+	if (m_token.empty() || m_useCnt > 100)
+	{
+		getToken();
+		m_useCnt = 0;
+	}
+
 	if (!postPrefixTemplate)
 		return 0;
 
@@ -114,9 +193,6 @@ char* BingWindow::GetTranslationPrefix(Language src, Language dst, const char* t
 
 	if (!text)
 		return (char*)1;
-
-	if (m_token.empty())
-		getToken();
 
 #if 0
 	int lines = 1;
@@ -151,6 +227,7 @@ char* BingWindow::GetTranslationPrefix(Language src, Language dst, const char* t
 	char* out = (char*)malloc(strlen(postPrefixTemplate) + strlen(text2) + strlen(srcString) + strlen(dstString) + m_token.length() + m_key.length() + 1);
 	sprintf(out, postPrefixTemplate, text2, srcString, dstString, m_token.c_str(), m_key.c_str());
 	free(text2);
+	m_useCnt++;
 	return out;
 }
 
@@ -261,5 +338,5 @@ char* BingWindow::GetLangIdString(Language lang, int src)
 			return "pt";
 		default:
 			return 0;
-	}
+}
 }
