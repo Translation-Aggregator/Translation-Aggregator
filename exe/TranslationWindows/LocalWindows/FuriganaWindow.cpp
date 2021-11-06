@@ -1,4 +1,4 @@
-﻿#include <Shared/Shrink.h>
+#include <Shared/Shrink.h>
 #include "FuriganaWindow.h"
 #include "../../config.h"
 #include "../../Dialogs/MyToolTip.h"

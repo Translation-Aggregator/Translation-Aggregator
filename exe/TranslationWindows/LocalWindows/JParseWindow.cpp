@@ -1,4 +1,4 @@
-﻿#include <Shared/Shrink.h>
+#include <Shared/Shrink.h>
 #include "JParseWindow.h"
 #include "../../util/Dictionary.h"
 

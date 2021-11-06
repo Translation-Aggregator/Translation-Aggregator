@@ -1,4 +1,4 @@
-﻿#include <Shared/Shrink.h>
+#include <Shared/Shrink.h>
 #include "MecabWindow.h"
 #include "../../util/Mecab.h"
 #include <Shared/StringUtil.h>

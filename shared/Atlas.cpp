@@ -1,4 +1,4 @@
-﻿#include <Shared/Shrink.h>
+#include <Shared/Shrink.h>
 #include <Shared/Atlas.h>
 #include <Shared/StringUtil.h>
 #include <Shared/ProcessUtil.h>

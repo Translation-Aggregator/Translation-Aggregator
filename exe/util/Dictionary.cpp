@@ -1,4 +1,4 @@
-﻿#include "Shared/Shrink.h"
+#include "Shared/Shrink.h"
 
 #include "Dictionary.h"
 #include "Shared/scoped_ptr.h"

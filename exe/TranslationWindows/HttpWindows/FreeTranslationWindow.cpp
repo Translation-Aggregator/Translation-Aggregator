@@ -1,4 +1,4 @@
-﻿#include <Shared/Shrink.h>
+#include <Shared/Shrink.h>
 #include "FreeTranslationWindow.h"
 
 FreeTranslationWindow::FreeTranslationWindow() : HttpWindow(L"FreeTranslation", L"http://www.freetranslation.com/")

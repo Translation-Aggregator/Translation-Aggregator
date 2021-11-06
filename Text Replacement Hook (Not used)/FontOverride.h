@@ -1,4 +1,4 @@
-﻿// returns GetTextExtentPoint32W return value.
+// returns GetTextExtentPoint32W return value.
 DWORD InternalGetExtentPoint32PlusW(HDC hDC, wchar_t *string, int numChars, SIZE *s, int *charWidth, int *spacerWidth, int *charHeight, int maxWidth);
 BOOL InternalExtTextOut(HDC hDC,          // handle to DC
 						int X,            // x-coordinate of reference point

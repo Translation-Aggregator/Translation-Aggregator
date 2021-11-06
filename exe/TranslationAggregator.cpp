@@ -1,4 +1,4 @@
-﻿// Handles main windows and basically everything that involves
+// Handles main windows and basically everything that involves
 // communication between multipl subwindows.
 // #include <vld.h>
 /*

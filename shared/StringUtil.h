@@ -1,4 +1,4 @@
-﻿#pragma once
+#pragma once
 
 #define BREAK_ON_ELLIPSES                   0x001
 #define BREAK_ON_COMMAS                     0x002

@@ -1,4 +1,4 @@
-﻿// "Test" in Shift-JIS
+// "Test" in Shift-JIS
 // "ƒeƒXƒg"
 
 
