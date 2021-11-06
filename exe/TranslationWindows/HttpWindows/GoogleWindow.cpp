@@ -151,7 +151,6 @@ wchar_t *GoogleWindow::FindTranslatedText(wchar_t* html)
 	wchar_t *end;
 	if ((html = wcsstr(html, L"[[[\"")) && (end = wcsstr(html += 4, L"]],")))
 	{
-		*end = 0;
 		ParseJSON(html, NULL, L"],[\"", true);
 		return html;
 	}
