@@ -8,7 +8,7 @@ m_useCnt(0)
 {
 	host = L"www.bing.com";
 	path = L"/ttranslatev3?isVertical=1&=&IG=%s&IID=%s.%u";
-	postPrefixTemplate = "&text=%s&fromLang=%s&to=%s&token=%s&key=%s&isAuthv2=true";
+	postPrefixTemplate = "&text=%s&fromLang=%s&to=%s&token=%s&key=%s";
 	port = 80;
 	requestHeaders = nullptr; //L"Content-Type: application/x-www-form-urlencoded";
 	dontEscapeRequest = true;
@@ -269,13 +269,13 @@ char* BingWindow::GetLangIdString(Language lang, int src)
 		case LANGUAGE_Indonesian:
 			return "id";
 		case LANGUAGE_Chinese_Simplified:
-			return "zh-CHS";
+			return "zh-Hans";
 		case LANGUAGE_Italian:
 			return "it";
 		case LANGUAGE_Slovak:
 			return "sk";
 		case LANGUAGE_Chinese_Traditional:
-			return "zh-CHT";
+			return "zh-Hant";
 		case LANGUAGE_Slovenian:
 			return "sl";
 		case LANGUAGE_Croatian:
