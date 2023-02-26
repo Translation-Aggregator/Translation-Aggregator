@@ -1217,7 +1217,7 @@ INT_PTR CALLBACK ContextDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARA
 				}
 				else if (LOWORD(wParam) == IDC_PHRASE_REPEAT_CUSTOM_MIN || LOWORD(wParam) == IDC_PHRASE_REPEAT_CUSTOM_MAX)
 				{
-					if (selectedContext >= 0)
+					if (selectedContext != 0)
 					{
 						unsigned int min = GetDlgItemInt(hWndContextDlg, IDC_PHRASE_REPEAT_CUSTOM_MIN, 0, 0);
 						unsigned int max = GetDlgItemInt(hWndContextDlg, IDC_PHRASE_REPEAT_CUSTOM_MAX, 0, 0);
@@ -1232,7 +1232,7 @@ INT_PTR CALLBACK ContextDialogProc(HWND hWndDlg, UINT uMsg, WPARAM wParam, LPARA
 				}
 				else if (LOWORD(wParam) == IDC_LINE_BREAK_FIRST || LOWORD(wParam) == IDC_LINE_BREAK_LAST)
 				{
-					if (selectedContext >= 0)
+					if (selectedContext != 0)
 					{
 						unsigned int first = GetDlgItemInt(hWndContextDlg, IDC_LINE_BREAK_FIRST, 0, 0);
 						unsigned int last = GetDlgItemInt(hWndContextDlg, IDC_LINE_BREAK_LAST, 0, 0);
