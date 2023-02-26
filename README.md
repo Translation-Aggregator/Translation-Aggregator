@@ -9,7 +9,7 @@ The **archived** discussion thread for this program is available [here](https://
 ## Downloads
 
 The following binaries are available:  
-* [Win32 (Intel 32-bit GCC)](https://github.com/Translation-Aggregator/Translation-Aggregator/releases/download/latest/TranslationAggregator-win32.7z)  
+* [Win32 (Intel 32-bit GCC)](https://github.com/Translation-Aggregator/Translation-Aggregator/releases/latest/download/TranslationAggregator-win32.7z)  
 
 ## About
 
