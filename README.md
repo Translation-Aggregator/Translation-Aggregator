@@ -6,6 +6,11 @@ Translation Aggregator is a program that machine translates texts through multip
 
 The **archived** discussion thread for this program is available [here](https://web.archive.org/web/20190905051811/http://www.hongfire.com:80/forum/forum/hentai-lair/hentai-game-discussion/tools-and-tutorials/68499-translation-aggregator).
 
+## Downloads
+
+The following binaries are available:  
+* [Win32 (Intel 32-bit GCC)](https://github.com/Translation-Aggregator/Translation-Aggregator/releases/download/latest/TranslationAggregator-win32.7z)  
+
 ## About
 
 Translation Aggregator basically works like ATLAS, with support for using a number of website translators and ATLAS simultaneously. It was designed to replace ATLAS's interface as well as add support for getting translations from a few additional sources. Currently, it has support for getting translations from Atlas V13 or V14 (Don't need to have Atlas running), Google, Honyaku, Babel Fish, FreeTranslations.com, Excite, OCN, a word-by-word breakdown from WWWJDIC, [MeCab](http://taku910.github.io/mecab/), which converts Kanji to Katakana, and its own built-in Japanese parser (JParser). I picked websites based primarily on what I use and how easy it was to figure out their translation request format. I'm open to adding more, but some of the other sites (Like Word Lingo) seem to go to some effort to make this difficult.
