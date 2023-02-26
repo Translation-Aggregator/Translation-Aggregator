@@ -12,4 +12,5 @@ public:
 
 private:
 	wchar_t* m_pResult;
+	int64_t m_id;
 };

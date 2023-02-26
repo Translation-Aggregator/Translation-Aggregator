@@ -9,6 +9,8 @@
 #include <fstream>
 #include <stdint.h>
 #include <list>
+#include <chrono>
+#include <random>
 
 using json = nlohmann::json;
 
@@ -107,6 +109,12 @@ DeepLWindow::DeepLWindow() :
 	port = 443;
 	dontEscapeRequest = true;
 	requestHeaders = L"Content-Type: application/json";
+
+	auto gen = std::mt19937{ std::random_device{}() };
+	// Create our desired distribution
+	auto dist = std::uniform_int_distribution<int64_t>{ 1000, 9999 };
+
+	m_id = dist(gen) * 10000;
 }
 
 DeepLWindow::~DeepLWindow()
@@ -135,26 +143,31 @@ char* DeepLWindow::GetTranslationPrefix(Language src, Language dst, const char* 
 		{ "jsonrpc", "2.0" },
 		{ "method", "LMT_handle_jobs"},
 		{ "params", {
-			{ "commonJobParams", {{"regionalVariant", "en-US"}}},
 			{ "jobs", json::array() },
 			{"lang", {
 				{ "source_lang_computed", srcString },
-				{ "target_lang", dstString },
-				{ "user_preferred_langs", json::array({dstString, srcString}) },
+				{ "target_lang", dstString }
 			}},
 			{ "priority", 1 },
+			{ "commonJobParams", { {"mode", "translate"}, {"browserType", 1} } },
 			{"timestamp", 1615054788975}
 		  }} };
+
+		const int64_t timestamp = std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count();
+
+		j["params"]["timestamp"] = timestamp;
+		j["params"]["id"] = m_id++;
 
 		std::vector<std::string> before;
 
 		for (std::size_t i = 0; i < split.size(); i++)
 		{
-			json job = "{\"kind\":\"default\",\"raw_en_sentence\":\"\",\"raw_en_context_before\":[],\"raw_en_context_after\":[],\"preferred_num_beams\":1}"_json;
+			json job = "{\"kind\":\"default\",\"sentences\":[{\"text\":\"\",\"id\":0,\"prefix\":\"\"}],\"raw_en_context_before\":[],\"raw_en_context_after\":[],\"preferred_num_beams\":1}"_json;
 			const std::string str = split.at(i);
 			if (str.empty()) continue;
 
-			job["raw_en_sentence"] = str;
+			job["sentences"][0]["id"] = i;
+			job["sentences"][0]["text"] = str;
 
 			for (const std::string& s : before)
 				job["raw_en_context_before"].push_back(s);
@@ -206,7 +219,7 @@ wchar_t* DeepLWindow::FindTranslatedText(wchar_t* html)
 		{
 			for (const auto& val : j["result"]["translations"])
 			{
-				if (val.contains("beams") && val["beams"][0].contains("postprocessed_sentence"))
+				if (val.contains("beams") && val["beams"][0].contains("sentences"))
 				{
 					std::string c = " ";
 					while (!newLines.empty() && newLines.front() == i)
@@ -216,7 +229,7 @@ wchar_t* DeepLWindow::FindTranslatedText(wchar_t* html)
 						newLines.pop_front();
 					}
 
-					out.append(val["beams"][0]["postprocessed_sentence"].get<std::string>() + c);
+					out.append(val["beams"][0]["sentences"][0]["text"].get<std::string>() + c);
 					i++;
 				}
 			}
