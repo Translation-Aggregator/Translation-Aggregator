@@ -58,6 +58,9 @@ jobs:
       with:
         name: TranslationAggregator-win32
 
+    - name: Copy files to a consistent name
+      run: cp TranslationAggregator-win32/*.7z TranslationAggregator-win32/TranslationAggregator-win32.7z
+
     - name: Create prerelease
       if: github.ref == 'refs/heads/master'
       uses: marvinpinto/action-automatic-releases@latest
