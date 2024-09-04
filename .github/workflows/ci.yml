@@ -59,7 +59,7 @@ jobs:
         name: TranslationAggregator-win32
 
     - name: Copy files to a consistent name
-      run: cp TranslationAggregator-win32/*.7z TranslationAggregator-win32/TranslationAggregator-win32.7z
+      run: cp **/**.7z TranslationAggregator-win32.7z
 
     - name: Create prerelease
       if: github.ref == 'refs/heads/master'
@@ -70,7 +70,7 @@ jobs:
         automatic_release_tag: "latest"
         title: "Latest development builds"
         files: |
-          TranslationAggregator-win32/*
+          TranslationAggregator-win32.7z
 
     - name: Create release
       if: startsWith(github.ref, 'refs/tags/v')
