@@ -219,18 +219,30 @@ wchar_t* DeepLWindow::FindTranslatedText(wchar_t* html)
 		{
 			for (const auto& val : j["result"]["translations"])
 			{
-				if (val.contains("beams") && val["beams"][0].contains("sentences"))
-				{
-					std::string c = " ";
-					while (!newLines.empty() && newLines.front() == i)
-					{
-						if (c == " ") c.clear();
-						c.append("\n");
-						newLines.pop_front();
-					}
+				if (!val.contains("beams"))
+					continue;
 
-					out.append(val["beams"][0]["sentences"][0]["text"].get<std::string>() + c);
-					i++;
+				for (const auto& beam : val["beams"])
+				{
+					if (!beam.contains("sentences"))
+						continue;
+
+					for (const auto& sentence : beam["sentences"])
+					{
+						if (!sentence.contains("text"))
+							continue;
+
+						std::string c = " ";
+						while (!newLines.empty() && newLines.front() == i)
+						{
+							if (c == " ") c.clear();
+							c.append("\n");
+							newLines.pop_front();
+						}
+
+						out.append(sentence["text"].get<std::string>() + c);
+						i++;
+					}
 				}
 			}
 		}
