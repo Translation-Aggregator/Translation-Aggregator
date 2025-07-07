@@ -77,13 +77,13 @@
           "run" : "printf '%s\\n' '/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin' >> $GITHUB_PATH"
         },
         {
-          "name" : "Set up default build tools",
-          "run" : "brew install ninja meson p7zip"
+          "name" : "Set up default build tools (Homebrew)",
+          "run" : "sudo -H -E -u linuxbrew bash -c 'cd /home/linuxbrew && /home/linuxbrew/.linuxbrew/bin/brew install ninja meson p7zip'"
         },
         {
           "name" : "Set up mingw-w64 for GCC",
           "if" : "matrix.platform.compiler == 'gcc'",
-          "run" : "brew install mingw-w64"
+          "run" : "sudo -H -E -u linuxbrew bash -c 'cd /home/linuxbrew && /home/linuxbrew/.linuxbrew/bin/brew install mingw-w64'"
         },
         {
           "name" : "Set up mingw-w64 for Clang",
