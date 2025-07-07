@@ -1,83 +1,159 @@
-name: Continuous Integration
-on:
-  push:
-    paths:
-      - "**.c"
-      - "**.h"
-      - "**.cpp"
-      - "**.hpp"
-      - "**.build"
-      - "**.in"
-      - "**.yml"
-  pull_request:
-    paths:
-      - "**.c"
-      - "**.h"
-      - "**.cpp"
-      - "**.hpp"
-      - "**.build"
-      - "**.in"
-      - "**.yml"
-
-jobs:
-  build-win32:
-    runs-on: ubuntu-20.04
-    steps:
-      - uses: actions/checkout@v3
-        with:
-          submodules: recursive
-          fetch-depth: 0
-      - run: sudo apt-get update
-      - run: sudo apt-get install build-essential mingw-w64
-      - run: sudo update-alternatives --set i686-w64-mingw32-gcc /usr/bin/i686-w64-mingw32-gcc-posix
-      - run: sudo update-alternatives --set i686-w64-mingw32-g++ /usr/bin/i686-w64-mingw32-g++-posix
-      - uses: actions/setup-python@v1
-        with:
-          python-version: '3.x'
-      - uses: actions/cache@v1
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip
-          restore-keys: |
-            ${{ runner.os }}-pip
-      - run: python -m pip install --upgrade meson ninja
-      - run: meson setup build/ --cross-file ./3rdParty/meson_toolchains/mingw32_meson.ini
-      - run: meson compile -C build archive
-      - uses: actions/upload-artifact@v4
-        with:
-          name: TranslationAggregator-win32
-          path: build/*.7z
-
-  create-release:
-    needs: [build-win32]
-    runs-on: ubuntu-20.04
-    if: startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'
-    steps:
-    - name: Download win32 artifact
-      uses: actions/download-artifact@v4
-      with:
-        name: TranslationAggregator-win32
-        path: TranslationAggregator-win32
-
-    - name: Copy files to a consistent name
-      run: cp TranslationAggregator-win32/*.7z TranslationAggregator-win32/TranslationAggregator-win32.7z
-
-    - name: Create prerelease
-      if: github.ref == 'refs/heads/master'
-      uses: marvinpinto/action-automatic-releases@latest
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        prerelease: true
-        automatic_release_tag: "latest"
-        title: "Latest development builds"
-        files: |
-          TranslationAggregator-win32/*
-
-    - name: Create release
-      if: startsWith(github.ref, 'refs/tags/v')
-      uses: marvinpinto/action-automatic-releases@latest
-      with:
-        repo_token: "${{ secrets.GITHUB_TOKEN }}"
-        prerelease: "${{ contains(github.ref, '-rc') }}"
-        files: |
-          **/**.7z
+{
+  "name" : "Continuous Integration",
+  "on" : {
+    "push" : {
+      "paths" : [
+        "**.c",
+        "**.h",
+        "**.cpp",
+        "**.hpp",
+        "**.build",
+        "**.in",
+        "**.py",
+        "**.yml",
+        "**.gradle",
+        "**.cmake",
+        "CMakeLists.txt"
+      ]
+    },
+    "pull_request" : {
+      "paths" : [
+        "**.c",
+        "**.h",
+        "**.cpp",
+        "**.hpp",
+        "**.build",
+        "**.in",
+        "**.py",
+        "**.yml",
+        "**.gradle",
+        "**.cmake",
+        "CMakeLists.txt"
+      ]
+    }
+  },
+  "env" : {
+    "CMAKE_GENERATOR" : "Ninja",
+    "HOMEBREW_NO_ANALYTICS" : "1",
+    "HOMEBREW_NO_AUTO_UPDATE" : "1",
+    "HOMEBREW_NO_INSTALL_UPGRADE" : "1",
+    "HOMEBREW_NO_INSTALL_CLEANUP" : "1",
+    "DEBIAN_FRONTEND" : "noninteractive",
+    "TZ" : "Japan"
+  },
+  "jobs" : {
+    "build-win32" : {
+      "strategy" : {
+        "fail-fast" : false,
+        "matrix" : {
+          "platform" : [
+            {
+              "triplet" : "i686-w64-mingw32",
+              "cmake-system-compiler" : "i686",
+              "compiler" : "gcc"
+            }
+          ]
+        }
+      },
+      "runs-on" : "ubuntu-latest",
+      "timeout-minutes" : 20,
+      "container" : {
+        "image" : "ghcr.io/homebrew/ubuntu20.04:latest",
+        "options" : "--user 0"
+      },
+      "steps" : [
+        {
+          "name" : "Set up base environment (Ubuntu)",
+          "run" : "apt-get -y update && apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' install build-essential"
+        },
+        {
+          "uses" : "actions/checkout@v4",
+          "with" : {
+            "submodules" : "recursive"
+          }
+        },
+        {
+          "name" : "Set up Homebrew environment for Github Actions",
+          "run" : "printf '%s\\n' '/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin' >> $GITHUB_PATH"
+        },
+        {
+          "name" : "Set up default build tools",
+          "run" : "brew install ninja meson p7zip"
+        },
+        {
+          "name" : "Set up mingw-w64 for GCC",
+          "if" : "matrix.platform.compiler == 'gcc'",
+          "run" : "brew install mingw-w64"
+        },
+        {
+          "name" : "Set up mingw-w64 for Clang",
+          "if" : "matrix.platform.compiler == 'clang'",
+          "run" : "curl -LO https://github.com/mstorsjo/llvm-mingw/releases/download/20220323/llvm-mingw-20220323-msvcrt-ubuntu-18.04-x86_64.tar.xz\ntar xvf llvm-mingw-20220323-msvcrt-ubuntu-18.04-x86_64.tar.xz\nmv llvm-mingw-20220323-msvcrt-ubuntu-18.04-x86_64 /opt/llvm-mingw\nexport PATH=\"/opt/llvm-mingw/bin:$PATH\"\necho \"/opt/llvm-mingw/bin\" >> $GITHUB_PATH"
+        },
+        {
+          "name" : "Configure project",
+          "run" : "meson setup build/ --cross-file ./3rdParty/meson_toolchains/mingw32_meson.ini"
+        },
+        {
+          "name" : "Build project",
+          "run" : "meson compile -C build archive"
+        },
+        {
+          "uses" : "actions/upload-artifact@v4",
+          "with" : {
+            "name" : "TranslationAggregator-win32",
+            "path" : "build/*.7z"
+          }
+        }
+      ]
+    },
+    "create-release" : {
+      "needs" : [
+        "build-win32"
+      ],
+      "runs-on" : "ubuntu-latest",
+      "container" : {
+        "image" : "ubuntu:20.04",
+        "options" : "--user 0"
+      },
+      "timeout-minutes" : 20,
+      "if" : "startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'",
+      "steps" : [
+        {
+          "name" : "Download win32 artifact",
+          "uses" : "actions/download-artifact@v4",
+          "with" : {
+            "name" : "TranslationAggregator-win32",
+            "path" : "TranslationAggregator-win32"
+          }
+        },
+        {
+          "name" : "Copy files to a consistent name",
+          "run" : "cp TranslationAggregator-win32/*.7z TranslationAggregator-win32/TranslationAggregator-win32.7z"
+        },
+        {
+          "name" : "Create release",
+          "if" : "startsWith(github.ref, 'refs/tags/v')",
+          "uses" : "marvinpinto/action-automatic-releases@latest",
+          "with" : {
+            "repo_token" : "${{ secrets.GITHUB_TOKEN }}",
+            "prerelease" : "${{ contains(github.ref, '-rc') }}",
+            "files" : "**/**.7z"
+          }
+        },
+        {
+          "name" : "Create prerelease",
+          "if" : "github.ref == 'refs/heads/master'",
+          "uses" : "marvinpinto/action-automatic-releases@latest",
+          "with" : {
+            "repo_token" : "${{ secrets.GITHUB_TOKEN }}",
+            "prerelease" : "true",
+            "automatic_release_tag" : "latest",
+            "title" : "Latest development builds",
+            "files" : "**/**.7z"
+          }
+        }
+      ]
+    }
+  }
+}
