@@ -20,6 +20,10 @@
 #include <map>
 #endif
 
+#ifdef __GNUC__
+#include <stdint.h>
+#endif
+
 #include <commdlg.h>
 #include <mmsystem.h>
 #include <shellapi.h>
