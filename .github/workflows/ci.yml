@@ -51,6 +51,11 @@
               "triplet" : "i686-w64-mingw32",
               "cmake-system-compiler" : "i686",
               "compiler" : "gcc"
+            },
+            {
+              "triplet" : "i686-w64-mingw32",
+              "cmake-system-compiler" : "i686",
+              "compiler" : "clang"
             }
           ]
         }
@@ -63,22 +68,26 @@
       },
       "steps" : [
         {
-          "name" : "Set up base environment (Ubuntu)",
-          "run" : "apt-get -y update && apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' install build-essential"
-        },
-        {
           "uses" : "actions/checkout@v4",
           "with" : {
             "submodules" : "recursive"
           }
         },
         {
+          "name" : "Mark all git directories safe",
+          "run" : "git config --global --add safe.directory '*'"
+        },
+        {
+          "name" : "Set up base environment",
+          "run" : "apt-get -y update && apt-get -y -o Dpkg::Options::='--force-confdef' -o Dpkg::Options::='--force-confold' install build-essential"
+        },
+        {
           "name" : "Set up Homebrew environment for Github Actions",
           "run" : "printf '%s\\n' '/home/linuxbrew/.linuxbrew/bin:/home/linuxbrew/.linuxbrew/sbin' >> $GITHUB_PATH"
         },
         {
-          "name" : "Set up default build tools (Homebrew)",
-          "run" : "sudo -H -E -u linuxbrew bash -c 'cd /home/linuxbrew && /home/linuxbrew/.linuxbrew/bin/brew install ninja meson p7zip'"
+          "name" : "Set up default build tools",
+          "run" : "sudo -H -E -u linuxbrew bash -c 'cd /home/linuxbrew && /home/linuxbrew/.linuxbrew/bin/brew install p7zip make nasm ninja cmake'"
         },
         {
           "name" : "Set up mingw-w64 for GCC",
@@ -92,17 +101,17 @@
         },
         {
           "name" : "Configure project",
-          "run" : "meson setup build/ --cross-file ./3rdParty/meson_toolchains/mingw32_meson.ini"
+          "run" : "cmake -S . -B build -GNinja -DCMAKE_SYSTEM_NAME=Windows -DCMAKE_SYSTEM_PROCESSOR=${{ matrix.platform.cmake-system-compiler }} -DCMAKE_FIND_ROOT_PATH=/dev/null -DCMAKE_FIND_ROOT_PATH_MODE_PROGRAM=NEVER -DCMAKE_FIND_ROOT_PATH_MODE_LIBRARY=ONLY -DCMAKE_FIND_ROOT_PATH_MODE_INCLUDE=ONLY -DCMAKE_FIND_ROOT_PATH_MODE_PACKAGE=ONLY -DCMAKE_C_COMPILER=${{ matrix.platform.triplet }}-gcc -DCMAKE_CXX_COMPILER=${{ matrix.platform.triplet }}-g++ -DCMAKE_RC_COMPILER=${{ matrix.platform.triplet }}-windres -DCMAKE_BUILD_TYPE=Release"
         },
         {
           "name" : "Build project",
-          "run" : "meson compile -C build archive"
+          "run" : "cmake --build build --target archive"
         },
         {
           "uses" : "actions/upload-artifact@v4",
           "with" : {
-            "name" : "TranslationAggregator-win32",
-            "path" : "build/*.7z"
+            "name" : "${{ github.event.repository.name }}-win32-${{ matrix.platform.cmake-system-compiler }}-${{ matrix.platform.compiler }}",
+            "path" : "build/**.7z"
           }
         }
       ]
@@ -120,16 +129,12 @@
       "if" : "startsWith(github.ref, 'refs/tags/v') || github.ref == 'refs/heads/master'",
       "steps" : [
         {
-          "name" : "Download win32 artifact",
-          "uses" : "actions/download-artifact@v4",
-          "with" : {
-            "name" : "TranslationAggregator-win32",
-            "path" : "TranslationAggregator-win32"
-          }
+          "name" : "Download all artifacts",
+          "uses" : "actions/download-artifact@v4"
         },
         {
           "name" : "Copy files to a consistent name",
-          "run" : "cp TranslationAggregator-win32/*.7z TranslationAggregator-win32/TranslationAggregator-win32.7z"
+          "run" : "cp **/*.gcc.7z TranslationAggregator-win32.7z"
         },
         {
           "name" : "Create release",
@@ -138,7 +143,7 @@
           "with" : {
             "repo_token" : "${{ secrets.GITHUB_TOKEN }}",
             "prerelease" : "${{ contains(github.ref, '-rc') }}",
-            "files" : "**/**.7z"
+            "files" : "**.7z\n**/**.7z"
           }
         },
         {
@@ -150,7 +155,7 @@
             "prerelease" : "true",
             "automatic_release_tag" : "latest",
             "title" : "Latest development builds",
-            "files" : "**/**.7z"
+            "files" : "**.7z\n**/**.7z"
           }
         }
       ]
