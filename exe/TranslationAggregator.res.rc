@@ -178,6 +178,8 @@ IDI_ICON1               ICON                    "icon1.ico"
 // Toolbar
 //
 
+#ifndef __clang__
+// FIXME: llvm-rc doesn't handle the undocumented TOOLBAR resource
 IDR_TOOLBAR_TRANSLATION TOOLBAR 19, 19
 BEGIN
     BUTTON      ID_TRANSLATE
@@ -197,6 +199,7 @@ BEGIN
     BUTTON      ID_SLOW6
     BUTTON      ID_SLOW7
 END
+#endif
 
 
 /////////////////////////////////////////////////////////////////////////////
