@@ -114,7 +114,7 @@ void TranslationWindow::ShowToolbar(int show)
 		{
 			//{0, ID_TRANSLATE, TBSTATE_ENABLED, BTNS_AUTOSIZE | BTNS_SHOWTEXT | TBSTYLE_BUTTON, {0}, 0, (INT_PTR)windowType},
 			{0, ID_TRANSLATE, TBSTATE_ENABLED, BTNS_AUTOSIZE | BTNS_SHOWTEXT | TBSTYLE_BUTTON, {0}, 0, (INT_PTR)windowType},
-			{3, ID_AUTO_CLIPBOARD, TBSTATE_ENABLED | (TBSTATE_CHECKED * (autoClipboard != 0)), BTNS_CHECK, {0}, 0, (INT_PTR)L"Automatic Clipboard Translation"},
+			{3, ID_AUTO_CLIPBOARD, (BYTE)(TBSTATE_ENABLED | ((autoClipboard != 0) ? TBSTATE_CHECKED : 0)), BTNS_CHECK, {0}, 0, (INT_PTR)L"Automatic Clipboard Translation"},
 		};
 
 		// Add buttons.

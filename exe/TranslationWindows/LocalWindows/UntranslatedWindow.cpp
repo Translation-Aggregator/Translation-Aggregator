@@ -24,7 +24,7 @@ void UntranslatedWindow::AddClassButtons()
 	{
 		{SEPARATOR_WIDTH, 0,   0, BTNS_SEP, {0}, 0, 0},
 		//{0, ID_TRANSLATE, TBSTATE_ENABLED, BTNS_AUTOSIZE | BTNS_SHOWTEXT | TBSTYLE_BUTTON, {0}, 0, (INT_PTR)windowType},
-		{8, ID_TRANS_HIGHLIGHTED, TBSTATE_ENABLED | (TBSTATE_CHECKED * (transHighlighted != 0)), BTNS_CHECK, {0}, 0, (INT_PTR)L"Auto Translate Highlighted Text"},
+		{8, ID_TRANS_HIGHLIGHTED, (BYTE)(TBSTATE_ENABLED | ((transHighlighted != 0) ? TBSTATE_CHECKED : 0)), BTNS_CHECK, {0}, 0, (INT_PTR)L"Auto Translate Highlighted Text"},
 		//{7, ID_TOPMOST, TBSTATE_ENABLED | (TBSTATE_CHECKED * (config.topmost != 0)), BTNS_CHECK, {0}, 0, (INT_PTR)L"Always on Top"},
 	};
 
