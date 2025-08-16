@@ -134,7 +134,7 @@
         },
         {
           "name" : "Copy files to a consistent name",
-          "run" : "cp *.gcc.7z TranslationAggregator-win32.7z"
+          "run" : "cp **-gcc/*.7z TranslationAggregator-win32.7z"
         },
         {
           "name" : "Create release",
@@ -143,7 +143,7 @@
           "with" : {
             "repo_token" : "${{ secrets.GITHUB_TOKEN }}",
             "prerelease" : "${{ contains(github.ref, '-rc') }}",
-            "files" : "**.7z"
+            "files" : "*.7z\n**/*.7z"
           }
         },
         {
@@ -155,7 +155,7 @@
             "prerelease" : "true",
             "automatic_release_tag" : "latest",
             "title" : "Latest development builds",
-            "files" : "**.7z"
+            "files" : "*.7z\n**/*.7z"
           }
         }
       ]
